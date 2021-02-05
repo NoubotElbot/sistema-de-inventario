@@ -21,7 +21,7 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
-	public $baseURL = 'http://localhost/proyecto/';
+	public $baseURL = 'http://cvaldovino.lgodoy.cl/';
 
 	/*
 	|--------------------------------------------------------------------------
