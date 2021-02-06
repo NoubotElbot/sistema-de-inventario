@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="elements-utilities.html">
+                            <a href="<?=base_url().'/categoria/agregar'?>" <?= $vista == 'categoria-agregar' ? 'class="mm-active"' : ''?>>
                                 <i class="metismenu-icon">
                                 </i>Agregar Categoría
                             </a>

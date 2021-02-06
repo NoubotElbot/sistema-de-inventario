@@ -153,7 +153,7 @@ Hello World!
 									<div class="widget-content-wrapper">
 										<div class="widget-content-left mr-3">
 											<div class="widget-content-left">
-												<img width="40" class="rounded-circle" src="public/images/avatars/4.jpg" alt="">
+												<img width="40" class="rounded-circle" src="images/avatars/4.jpg" alt="">
 											</div>
 										</div>
 										<div class="widget-content-left flex2">
@@ -213,7 +213,7 @@ Hello World!
 										<div class="widget-content p-0">
 											<div class="widget-content-wrapper">
 												<div class="widget-content-left mr-3">
-													<img width="42" class="rounded-circle" src="public/images/avatars/9.jpg" alt="">
+													<img width="42" class="rounded-circle" src="images/avatars/9.jpg" alt="">
 												</div>
 												<div class="widget-content-left">
 													<div class="widget-heading">Ella-Rose Henry
@@ -237,7 +237,7 @@ Hello World!
 										<div class="widget-content p-0">
 											<div class="widget-content-wrapper">
 												<div class="widget-content-left mr-3">
-													<img width="42" class="rounded-circle" src="public/images/avatars/5.jpg" alt="">
+													<img width="42" class="rounded-circle" src="images/avatars/5.jpg" alt="">
 												</div>
 												<div class="widget-content-left">
 													<div class="widget-heading">Ruben Tillman</div>
@@ -259,7 +259,7 @@ Hello World!
 										<div class="widget-content p-0">
 											<div class="widget-content-wrapper">
 												<div class="widget-content-left mr-3">
-													<img width="42" class="rounded-circle" src="public/images/avatars/4.jpg" alt="">
+													<img width="42" class="rounded-circle" src="images/avatars/4.jpg" alt="">
 												</div>
 												<div class="widget-content-left">
 													<div class="widget-heading">Vinnie Wagstaff
@@ -283,7 +283,7 @@ Hello World!
 										<div class="widget-content p-0">
 											<div class="widget-content-wrapper">
 												<div class="widget-content-left mr-3">
-													<img width="42" class="rounded-circle" src="public/images/avatars/3.jpg" alt="">
+													<img width="42" class="rounded-circle" src="images/avatars/3.jpg" alt="">
 												</div>
 												<div class="widget-content-left">
 													<div class="widget-heading">Ella-Rose Henry
@@ -307,7 +307,7 @@ Hello World!
 										<div class="widget-content p-0">
 											<div class="widget-content-wrapper">
 												<div class="widget-content-left mr-3">
-													<img width="42" class="rounded-circle" src="public/images/avatars/2.jpg" alt="">
+													<img width="42" class="rounded-circle" src="images/avatars/2.jpg" alt="">
 												</div>
 												<div class="widget-content-left">
 													<div class="widget-heading">Ruben Tillman</div>

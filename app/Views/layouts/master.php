@@ -20,7 +20,11 @@
     =========================================================
     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
     -->
-    <link href="<?= base_url() . '/public/css/main.css' ?>" rel="stylesheet">
+    <link href="<?= base_url() . '/css/main.css' ?>" rel="stylesheet">
+    <link href="<?= base_url() . '/css/micss.css' ?>" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<?= base_url() ?>/DataTables/DataTables-1.10.23/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url() ?>/DataTables/Buttons-1.6.5/css/buttons.bootstrap4.min.css" />
+    
 </head>
 
 <body>
@@ -36,7 +40,19 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="<?= base_url() . '/public/js/main.js' ?>"></script>
+    <script type="text/javascript" src="<?= base_url() . '/js/main.js' ?>"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/JSZip-2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/DataTables-1.10.23/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/DataTables-1.10.23/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/buttons.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() . '/js/datatables.js' ?>"></script>
+    
+
 </body>
 
 </html>
