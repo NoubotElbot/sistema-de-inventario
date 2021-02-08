@@ -1,4 +1,6 @@
-<?php namespace Config;
+<?php
+
+namespace Config;
 
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
@@ -22,12 +24,12 @@ $routes->setTranslateURIDashes(false);
 $routes->set404Override();
 $routes->setAutoRoute(false);
 
-/**
+/*
  * --------------------------------------------------------------------
  * Route Definitions
  * --------------------------------------------------------------------
  */
- 
+
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->match(['get','post'],'/', 'Usuario::index', ['as'=>'login','filter' => 'noauth']);
@@ -39,7 +41,8 @@ $routes->post('categoria/agregar', 'Categoria::agregar', ['filter' => 'super']);
 $routes->match(['get','put'],'categoria/(:num)/editar', 'Categoria::editar/$1', ['filter' => 'super']);
 $routes->match(['put','delete'],'categoria/(:num)/desactivar', 'Categoria::desactivar/$1', ['filter' => 'super']);
 
-/**
+
+/*
  * --------------------------------------------------------------------
  * Additional Routing
  * --------------------------------------------------------------------
