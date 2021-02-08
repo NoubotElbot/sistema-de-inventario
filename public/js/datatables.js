@@ -1,5 +1,6 @@
 $(document).ready(function () {
   $('#myTable').DataTable({
+    
     language: {
       "processing": "Procesando...",
       "lengthMenu": "Mostrar _MENU_ registros",

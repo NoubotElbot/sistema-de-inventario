@@ -8,21 +8,29 @@ class Categoria extends BaseController
 {
 	public function index()
 	{
-		$data = [];
 		$data['vista'] = 'categoria-lista';
-		helper(['form']);
-		$categoriaModel = new CategoriaModel();
-		$data['categorias'] = $categoriaModel->findAll();
+		// $categoriaModel = new CategoriaModel();
+		// $data['categorias'] = $categoriaModel->findAll();
 
 		return view('Categoria/categoria', $data);
 	}
 
+	public function obtenerData()
+	{
+		if ($this->request->isAJAX()) {
+			$categoriaModel = new CategoriaModel();
+			$data['categorias'] = $categoriaModel->findAll();
+			$msg['data'] = view('Categoria/categoria_lista', $data);
+			return json_encode($msg);
+		} else {
+			exit('error');
+		}
+	}
+
+
 	public function agregar()
 	{
-		$data = [];
-		$data['vista'] = 'categoria-agregar';
-		helper(['form']);
-		if ($this->request->getMethod() === 'post') {
+		if ($this->request->isAJAX()) {
 			$rules = [
 				'nombre' => 'required',
 				'descripcion' => 'max_length[255]'
@@ -35,7 +43,12 @@ class Categoria extends BaseController
 					'max_length' => 'Descripcion excede el largo de 255 caracteres'
 				]
 			];
-			if ($this->validate($rules, $messages)) {
+			if (!$this->validate($rules, $messages)) {
+				$msg['error'] = [
+					'nombre' => $this->validator->getError('nombre'),
+					'descripcion' => $this->validator->getError('descripcion'),
+				];
+			} else {
 				$categoriaModel = new CategoriaModel();
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
@@ -43,11 +56,12 @@ class Categoria extends BaseController
 					'create_at' => date('Y-m-d H:i:s')
 				];
 				$categoriaModel->save($datos);
-				return redirect()->to("/categoria");
+				$msg['success'] = 'Datos Ingresados correctamente';
 			}
+			return json_encode($msg);
+		} else {
+			exit('Nope');
 		}
-
-		return view('Categoria/categoria_agregar', $data);
 	}
 
 	public function editar($id)
@@ -70,13 +84,13 @@ class Categoria extends BaseController
 				]
 			];
 			if ($this->validate($rules, $messages)) {
-				
+
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
 					'descripcion' => $this->request->getPost('descripcion'),
 					'create_at' => date('Y-m-d H:i:s')
 				];
-				$categoriaModel->update($id,$datos);
+				$categoriaModel->update($id, $datos);
 				return redirect()->to("/categoria");
 			}
 		}
@@ -88,10 +102,10 @@ class Categoria extends BaseController
 	{
 		$categoriaModel = new CategoriaModel();
 		if ($this->request->getMethod() === 'delete') {
-			$categoriaModel->update($id,['activo' => 0]);
+			$categoriaModel->update($id, ['activo' => 0]);
 		}
 		if ($this->request->getMethod() === 'put') {
-			$categoriaModel->update($id,['activo' => 1]);
+			$categoriaModel->update($id, ['activo' => 1]);
 		}
 		return redirect()->to('/categoria');
 	}

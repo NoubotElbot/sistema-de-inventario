@@ -27,14 +27,18 @@ $routes->setAutoRoute(false);
  * Route Definitions
  * --------------------------------------------------------------------
  */
-
+ 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
-$routes->get('categoria', 'Categoria::index');
-$routes->match(['get','post'],'categoria/agregar', 'Categoria::agregar');
-$routes->match(['get','put'],'categoria/(:num)/editar', 'Categoria::editar/$1');
-$routes->match(['put','delete'],'categoria/(:num)/desactivar', 'Categoria::desactivar/$1');
+$routes->match(['get','post'],'/', 'Usuario::index', ['as'=>'login','filter' => 'noauth']);
+$routes->get('logout', 'Usuario::logout', ['as'=>'logout']);
+$routes->get('home', 'Home::index', ['as'=>'home','filter' => 'auth']);
+$routes->get('categoria', 'Categoria::index', ['filter' => 'auth']);
+$routes->get('categoria/lista', 'Categoria::obtenerData', ['filter' => 'auth']);
+$routes->post('categoria/agregar', 'Categoria::agregar', ['filter' => 'super']);
+$routes->match(['get','put'],'categoria/(:num)/editar', 'Categoria::editar/$1', ['filter' => 'super']);
+$routes->match(['put','delete'],'categoria/(:num)/desactivar', 'Categoria::desactivar/$1', ['filter' => 'super']);
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing

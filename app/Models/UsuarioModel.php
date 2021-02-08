@@ -15,7 +15,4 @@ class UsuarioModel extends Model
 
     protected $allowedFields = ['nombre', 'apellido', 'email', 'password', 'username', 'activo', 'admin', 'create_at'];
 
-    protected $validationRules    = [];
-    protected $validationMessages = [];
-    protected $skipValidation     = false;
 }

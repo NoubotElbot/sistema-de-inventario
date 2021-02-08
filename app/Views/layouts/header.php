@@ -66,7 +66,7 @@
                         <div class="widget-content-left">
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                    <img width="42" class="rounded-circle" src="<?= base_url() . "/images/avatars/1.jpg" ?>" alt="">
+                                    <?= session()->get('admin') == 1 ? '<img width="42" class="rounded-circle" src="/images/admin_pic.png" alt="">' : '<img width="42" class="rounded-circle" src="/images/user_logo.png" alt="">'?>
                                     <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                 </a>
                                 <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
@@ -75,16 +75,16 @@
                                     <h6 tabindex="-1" class="dropdown-header">Header</h6>
                                     <button type="button" tabindex="0" class="dropdown-item">Actions</button>
                                     <div tabindex="-1" class="dropdown-divider"></div>
-                                    <button type="button" tabindex="0" class="dropdown-item">Dividers</button>
+                                    <a href="<?= route_to("logout") ?>" tabindex="0" class="dropdown-item">Cerrar Sesión</a>
                                 </div>
                             </div>
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                Alina Mclourd
+                                <?= session()->get('nombre') . " " . session()->get('apellido') ?>
                             </div>
                             <div class="widget-subheading">
-                                VP People Manager
+                                <?= session()->get('admin') == '1' ? "Administrador" : "" ?>
                             </div>
                         </div>
                         <div class="widget-content-right header-user-info ml-3">
