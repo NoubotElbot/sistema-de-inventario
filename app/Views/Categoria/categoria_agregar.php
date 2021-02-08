@@ -21,7 +21,7 @@ Hello World!
                 <span class="btn-icon-wrapper pr-2 opacity-7">
                     <i class="fa fa-minus-circle fa-w-20"></i>
                 </span>
-                Cancelar
+                Cancelar adasd
             </a>
         </div>
     </div>
@@ -32,6 +32,7 @@ Hello World!
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <h5 class="card-title">Nueva Categoria</h5>
+                
                 <form class="" method="post" action="<?= base_url() . '/categoria/agregar' ?>">
                     <?= csrf_field() ?>
                     <div class="form-row">
