@@ -1,61 +1,92 @@
-<?= $this->extend('layouts/master') ?>
-
-<?= $this->section('titulo') ?>
-Hello World!
-<?= $this->endSection() ?>
-<?= $this->section('contenido') ?>
-<div class="app-page-title">
-    <div class="page-title-wrapper">
-        <div class="page-title-heading">
-            <div class="page-title-icon">
-                <i class="pe-7s-diamond icon-gradient bg-mean-fruit">
-                </i>
+<div class="modal fade" id="categoria-editar-modal" tabindex="999" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Categoria</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div>Editar Categoría
-                <div class="page-title-subheading">Edite las categorias de sus Productos
+            <div class="modal-body">
+                <h5 class="card-title">Editar Categoria N°<?= $id ?></h5>
+                <?= form_open("categoria/update", ['id' => 'categoria-editar']) ?>
+                <input type="hidden" name="_method" value="PUT" />
+                <input name="id" id="id-edit" type="hidden" class="form-control" value="<?= $id ?>" readonly>
+                <div class="form-row">
+                    <div class="col-sm-12">
+                        <div class="position-relative form-group">
+                            <label for="nombre" class="">Nombre</label>
+                            <input name="nombre" id="nombre-edit" placeholder="Ingrese el nombre de la categoría" type="text" class="form-control" value="<?= $nombre ?>">
+                            <div class="invalid-feedback validationNombre">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="page-title-actions">
-            <a href="<?= base_url() . '/categoria' ?>" class="btn-shadow btn btn-danger">
-                <span class="btn-icon-wrapper pr-2 opacity-7">
-                    <i class="fa fa-minus-circle fa-w-20"></i>
-                </span>
-                Cancelar
-            </a>
-        </div>
-    </div>
-</div>
-<div class="tab-content">
-    <?= \Config\Services::validation()->listErrors() ?>
-    <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <h5 class="card-title">Editar Categoria </h5>
-                <form class="" method="post" action="<?= base_url() . "/categoria/{$categoria['id']}/editar" ?>">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="_method" value="PUT" />
-                    <div class="form-row">
-                        <div class="col-lg-8 col-sm-12">
-                            <div class="position-relative form-group">
-                                <label for="nombre" class="">Nombre</label>
-                                <input name="nombre" id="nombre" placeholder="Ingrese el nombre de la categoría" type="text" class="form-control" value="<?= $categoria['nombre'] ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-lg-8 col-sm-12">
-                            <div class="position-relative form-group">
-                                <label for="descripcion" class="">Descripción</label>
-                                <textarea name="descripcion" id="descripcion" placeholder="Ingrese una descripción (Opcional)" rows="5" class="form-control"><?= $categoria['descripcion'] ?></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="mt-2 btn btn-lg btn-primary">Agregar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                <div class="form-row">
+                    <div class="col-sm-12">
+                        <div class="position-relative form-group">
+                            <label for="descripcion" class="">Descripción</label>
+                            <textarea name="descripcion" id="descripcion-edit" placeholder="Ingrese una descripción (Opcional)" rows="5" class="form-control"><?= $descripcion ?></textarea>
+                            <div class="invalid-feedback validationDescripcion">
 
-<?= $this->endSection() ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?= form_close() ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Cancelar</button>
+                <button form="categoria-editar" type="submit" class="btn btn-primary btnsubmit-edit">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script text="text/javascript">
+    $('#categoria-editar').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: "json",
+            beforeSend: function() {
+                $('.btnsubmit-edit').attr('disable', 'disabled');
+                $('.btnsubmit-edit').html('<i class="fa fa-spin fa-spinner"></i>')
+            },
+            complete: function() {
+                $('.btnsubmit-edit').removeAttr('disable');
+                $('.btnsubmit-edit').html('Actualizar')
+            },
+            success: function(response) {
+                if (response.error) {
+                    if (response.error.nombre) {
+                        $('#nombre-edit').addClass('is-invalid');
+                        $('.validationNombre').html(response.error.nombre);
+                    } else {
+                        $('#nombre-edit').removeClass('is-invalid');
+                        $('.validationNombre').html('');
+                    }
+
+                    if (response.error.descripcion) {
+                        $('#descripcion-edit').addClass('is-invalid');
+                        $('.validationDescripcion').html(response.error.descripcion);
+                    } else {
+                        $('#descripcion-edit').removeClass('is-invalid');
+                        $('.validationDescripcion').html('');
+                    }
+                } else {
+                    $("#categoria-editar-modal").modal('hide');
+                    $('.cuadro-alertas').show();
+                    $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
+                    cargarDatos();
+                }
+            },
+            error: function(xhr, ajaxOption, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+        return false;
+    })
+</script>

@@ -40,8 +40,14 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script> <!-- <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
     <script type="text/javascript" src="<?= base_url() . '/js/main.js' ?>"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $('.dropdown-toggle').dropdown()
+    </script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/JSZip-2.5.0/jszip.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/vfs_fonts.js"></script>
@@ -50,11 +56,10 @@
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/buttons.bootstrap4.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/buttons.html5.min.js"></script>
-    
     <?= $this->renderSection('scripts') ?>
-    
+
     <?= $this->renderSection('modals') ?>
-   
+
 </body>
 
 </html>

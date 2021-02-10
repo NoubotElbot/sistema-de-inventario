@@ -1,61 +1,91 @@
-<?= $this->extend('layouts/master') ?>
-
-<?= $this->section('titulo') ?>
-Hello World!
-<?= $this->endSection() ?>
-<?= $this->section('contenido') ?>
-<div class="app-page-title">
-    <div class="page-title-wrapper">
-        <div class="page-title-heading">
-            <div class="page-title-icon">
-                <i class="pe-7s-diamond icon-gradient bg-mean-fruit">
-                </i>
+<div class="modal fade" id="categoria-agregar-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div>Agregar Nueva Categoría
-                <div class="page-title-subheading">Agregue una nueva Categoría para sus Productos
-                </div>
-            </div>
-        </div>
-        <div class="page-title-actions">
-            <a href="<?= base_url() . '/categoria' ?>" class="btn-shadow btn btn-danger">
-                <span class="btn-icon-wrapper pr-2 opacity-7">
-                    <i class="fa fa-minus-circle fa-w-20"></i>
-                </span>
-                Cancelar adasd
-            </a>
-        </div>
-    </div>
-</div>
-<div class="tab-content">
-    <?= \Config\Services::validation()->listErrors() ?>
-    <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
-        <div class="main-card mb-3 card">
-            <div class="card-body">
+            <div class="modal-body">
                 <h5 class="card-title">Nueva Categoria</h5>
-                
-                <form class="" method="post" action="<?= base_url() . '/categoria/agregar' ?>">
-                    <?= csrf_field() ?>
-                    <div class="form-row">
-                        <div class="col-lg-8 col-sm-12">
-                            <div class="position-relative form-group">
-                                <label for="nombre" class="">Nombre</label>
-                                <input name="nombre" id="nombre" placeholder="Ingrese el nombre de la categoría" type="text" class="form-control" value="<?=set_value('nombre')?>">
+                <?= form_open('categoria/agregar', ['id' => 'categoria-agregar', 'class' => 'needs-validation']) ?>
+                <div class="form-row">
+                    <div class="col-sm-12">
+                        <div class="position-relative form-group">
+                            <label for="nombre" class="">Nombre</label>
+                            <input name="nombre" id="nombre" placeholder="Ingrese el nombre de la categoría" type="text" class="form-control">
+                            <div class="invalid-feedback validationNombre">
+
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="col-lg-8 col-sm-12">
-                            <div class="position-relative form-group">
-                                <label for="descripcion" class="">Descripción</label>
-                                <textarea name="descripcion" id="descripcion" placeholder="Ingrese una descripción (Opcional)" rows="5" class="form-control"><?=set_value('descripcion')?></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-12">
+                        <div class="position-relative form-group">
+                            <label for="descripcion" class="">Descripción</label>
+                            <textarea name="descripcion" id="descripcion" placeholder="Ingrese una descripción (Opcional)" rows="5" class="form-control"></textarea>
+                            <div class="invalid-feedback validationDescripcion">
+
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="mt-2 btn btn-lg btn-primary">Agregar</button>
-                </form>
+                </div>
+                <?= form_close() ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Cancelar</button>
+                <button form="categoria-agregar" type="submit" class="btn btn-primary btnsubmit">Guardar</button>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $('#categoria-agregar').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: "json",
+            beforeSend: function() {
+                $('.btnsubmit').attr('disable', 'disabled');
+                $('.btnsubmit').html('<i class="fa fa-spin fa-spinner"></i>')
+            },
+            complete: function() {
+                $('.btnsubmit').removeAttr('disable');
+                $('.btnsubmit').html('Guardar')
+            },
+            success: function(response) {
+                if (response.error) {
+                    if (response.error.nombre) {
+                        $('#nombre').addClass('is-invalid');
+                        $('.validationNombre').html(response.error.nombre);
+                    } else {
+                        $('#nombre').removeClass('is-invalid');
+                        $('.validationNombre').html('');
+                    }
 
-<?= $this->endSection() ?>
+                    if (response.error.descripcion) {
+                        $('#descripcion').addClass('is-invalid');
+                        $('.validationDescripcion').html(response.error.descripcion);
+                    } else {
+                        $('#descripcion').removeClass('is-invalid');
+                        $('.validationDescripcion').html('');
+                    }
+                } else {
+                    $(".close-modal").click();
+                    document.getElementById("categoria-agregar").reset();
+                    $('.cuadro-alertas').show();
+                    $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
+                    cargarDatos();
+                }
+            },
+            error: function(xhr, ajaxOption, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+        return false;
+    })
+</script>

@@ -23,11 +23,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="javascript:void(0);" class="nav-link">
+                        <a href="#" class="nav-link">
                             <div class="badge badge-success mr-1 ml-0">
-                                <small>NEW</small>
+                            <i class="fas fa-arrow-up"></i>
                             </div>
-                            Footer Link 4
                         </a>
                     </li>
                 </ul>

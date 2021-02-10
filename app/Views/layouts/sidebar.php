@@ -34,32 +34,17 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Dashboard</li>
                 <li>
-                    <a href="<?=base_url()?>" <?= $vista == 'home' ? 'class="mm-active"' : ''?>>
+                    <a href="<?= base_url() ?>" <?= $vista == 'home' ? 'class="mm-active"' : '' ?>>
                         <i class="metismenu-icon pe-7s-rocket"></i>
                         Home
                     </a>
                 </li>
                 <li class="app-sidebar__heading">MENU</li>
                 <li <?= strpos($vista, 'categoria') !== false ? 'class="mm-active"' : '' ?>>
-                    <a href="#" >
-                        <i class="metismenu-icon pe-7s-diamond"></i>
-                        Categorias
-                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    <a href="<?= base_url() . '/categoria' ?>" <?= $vista == 'categoria-lista' ? 'class="mm-active"' : '' ?>>
+                    <i class="metismenu-icon pe-7s-diamond"></i>
+                        Listar Categorias
                     </a>
-                    <ul>
-                        <li>
-                            <a href="<?=base_url().'/categoria'?>" <?= $vista == 'categoria-lista' ? 'class="mm-active"' : ''?>>
-                                <i class="metismenu-icon">
-                                </i>Listar Categorias
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<?=base_url().'/categoria/agregar'?>" <?= $vista == 'categoria-agregar' ? 'class="mm-active"' : ''?>>
-                                <i class="metismenu-icon">
-                                </i>Agregar Categoría
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </div>

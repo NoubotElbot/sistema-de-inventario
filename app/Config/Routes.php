@@ -35,12 +35,14 @@ $routes->setAutoRoute(false);
 $routes->match(['get','post'],'/', 'Usuario::index', ['as'=>'login','filter' => 'noauth']);
 $routes->get('logout', 'Usuario::logout', ['as'=>'logout']);
 $routes->get('home', 'Home::index', ['as'=>'home','filter' => 'auth']);
+
 $routes->get('categoria', 'Categoria::index', ['filter' => 'auth']);
 $routes->get('categoria/lista', 'Categoria::obtenerData', ['filter' => 'auth']);
 $routes->post('categoria/agregar', 'Categoria::agregar', ['filter' => 'super']);
-$routes->match(['get','put'],'categoria/(:num)/editar', 'Categoria::editar/$1', ['filter' => 'super']);
-$routes->match(['put','delete'],'categoria/(:num)/desactivar', 'Categoria::desactivar/$1', ['filter' => 'super']);
-
+$routes->post('categoria/editar', 'Categoria::editar', ['filter' => 'super']);
+$routes->put('categoria/update', 'Categoria::update', ['filter' => 'super']);
+$routes->post('categoria/borrar', 'Categoria::borrar', ['filter' => 'super']);
+$routes->delete('categoria/delete', 'Categoria::delete', ['filter' => 'super']);
 
 /*
  * --------------------------------------------------------------------

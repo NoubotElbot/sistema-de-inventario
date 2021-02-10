@@ -64,13 +64,23 @@ class Categoria extends BaseController
 		}
 	}
 
-	public function editar($id)
+	public function editar()
 	{
-		$data = [];
-		$data['vista'] = 'categoria-editar';
-		$categoriaModel = new CategoriaModel();
-		helper(['form']);
-		if ($this->request->getMethod() === 'put') {
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$categoriaModel = new CategoriaModel;
+
+			$data = $categoriaModel->find($id);
+			$msg['success'] = view("Categoria/categoria_editar", $data);
+			return json_encode($msg);
+		} else {
+			exit('Nope');
+		}
+	}
+
+	public function update()
+	{
+		if ($this->request->isAJAX()) {
 			$rules = [
 				'nombre' => 'required',
 				'descripcion' => 'max_length[255]'
@@ -83,31 +93,64 @@ class Categoria extends BaseController
 					'max_length' => 'Descripcion excede el largo de 255 caracteres'
 				]
 			];
-			if ($this->validate($rules, $messages)) {
-
+			if (!$this->validate($rules, $messages)) {
+				$msg['error'] = [
+					'nombre' => $this->validator->getError('nombre'),
+					'descripcion' => $this->validator->getError('descripcion'),
+				];
+			} else {
+				$categoriaModel = new CategoriaModel();
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
 					'descripcion' => $this->request->getPost('descripcion'),
 					'create_at' => date('Y-m-d H:i:s')
 				];
+				$id = $this->request->getPost('id');
 				$categoriaModel->update($id, $datos);
-				return redirect()->to("/categoria");
+				$msg['success'] = "Categoria #{$id} modificada exitosamente";
 			}
+			return json_encode($msg);
+		} else {
+			exit('Nope');
 		}
-		$data['categoria'] = $categoriaModel->find($id);
-		return view('Categoria/categoria_editar', $data);
 	}
 
-	public function desactivar($id)
+	public function borrar()
 	{
-		$categoriaModel = new CategoriaModel();
-		if ($this->request->getMethod() === 'delete') {
-			$categoriaModel->update($id, ['activo' => 0]);
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$categoriaModel = new CategoriaModel;
+
+			$data = $categoriaModel->find($id);
+			$msg['success'] = view("Categoria/categoria_borrar", $data);
+			return json_encode($msg);
+		} else {
+			exit('Nope');
 		}
-		if ($this->request->getMethod() === 'put') {
-			$categoriaModel->update($id, ['activo' => 1]);
+	}
+
+	public function delete()
+	{
+		if ($this->request->isAjax()) {
+			$categoriaModel = new CategoriaModel();
+			$id = $this->request->getVar('id');
+			$categoria = $categoriaModel->find($id);
+			if ($categoria) {
+				if ($categoria['activo'] == 1) {
+					$categoriaModel->update($id, ['activo' => 0]);
+					$msg['success'] = "Categoria #{$id} desactivada";
+				} else {
+					$categoriaModel->update($id, ['activo' => 1]);
+					$msg['success'] = "Categoria #{$id} activada";
+				}
+				
+			}else{
+				$msg['error'] = "Error al intentar modificar categoria #{$id}";
+			}
+			return json_encode($msg);
+		} else {
+			exit('Nope');
 		}
-		return redirect()->to('/categoria');
 	}
 
 	//--------------------------------------------------------------------
