@@ -32,17 +32,34 @@ $routes->setAutoRoute(false);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->match(['get','post'],'/', 'Usuario::index', ['as'=>'login','filter' => 'noauth']);
+/* Usuarios */
+$routes->match(['get','post'],'/', 'Usuario::login', ['as'=>'login','filter' => 'noauth']);
 $routes->get('logout', 'Usuario::logout', ['as'=>'logout']);
+$routes->get('usuario', 'Usuario::index', ['filter' => 'auth']);
+$routes->post('usuario/lista', 'Usuario::obtenerData', ['filter' => 'auth']);
+$routes->post('usuario/agregar', 'Usuario::agregar', ['filter' => 'super']);
+$routes->post('usuario/editar', 'Usuario::editar', ['filter' => 'auth']);
+$routes->put('usuario/update', 'Usuario::update', ['filter' => 'auth']);
+$routes->post('usuario/borrar', 'Usuario::borrar', ['filter' => 'super']);
+$routes->delete('usuario/delete', 'Usuario::delete', ['filter' => 'super']);
+/* Home */
 $routes->get('home', 'Home::index', ['as'=>'home','filter' => 'auth']);
-
+/* Categoria */
 $routes->get('categoria', 'Categoria::index', ['filter' => 'auth']);
-$routes->get('categoria/lista', 'Categoria::obtenerData', ['filter' => 'auth']);
+$routes->post('categoria/lista', 'Categoria::obtenerData', ['filter' => 'auth']);
 $routes->post('categoria/agregar', 'Categoria::agregar', ['filter' => 'super']);
 $routes->post('categoria/editar', 'Categoria::editar', ['filter' => 'super']);
 $routes->put('categoria/update', 'Categoria::update', ['filter' => 'super']);
 $routes->post('categoria/borrar', 'Categoria::borrar', ['filter' => 'super']);
 $routes->delete('categoria/delete', 'Categoria::delete', ['filter' => 'super']);
+/* Persona */
+$routes->get('persona', 'Persona::index', ['filter' => 'auth']);
+$routes->post('persona/lista', 'Persona::obtenerData', ['filter' => 'auth']);
+$routes->post('persona/agregar', 'Persona::agregar', ['filter' => 'super']);
+$routes->post('persona/editar', 'Persona::editar', ['filter' => 'super']);
+$routes->put('persona/update', 'Persona::update', ['filter' => 'super']);
+$routes->post('persona/borrar', 'Persona::borrar', ['filter' => 'super']);
+$routes->delete('persona/delete', 'Persona::delete', ['filter' => 'super']);
 
 /*
  * --------------------------------------------------------------------

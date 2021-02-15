@@ -7,10 +7,9 @@ use App\Models\UsuarioModel;
 class Usuario extends BaseController
 {
 
-    public function index()
+    public function login()
     {
         $data = [];
-        helper(['form']);
         if ($this->request->getMethod() == 'post') {
             //let's do the validation here
             $rules = [
@@ -56,183 +55,233 @@ class Usuario extends BaseController
         return true;
     }
 
-
-    public function lista()
+    public function index()
     {
-        helper(['form']);
-        $data['rows'] = 10;
-        $data['user'] = '';
-        if ($this->request->getPostGet('rows')) {
-            $data['rows'] = $this->request->getPostGet('rows');
-        }
-        $usuarioModel = new UsuarioModel($db);
-        if ($this->request->getPostGet('user')) {
-            $data['user'] = $this->request->getPostGet('user');
-            $data['usuarios'] = $usuarioModel->select('usuario.*, perfil.perfil')
-                ->join('perfil', 'usuario.perfil_id = perfil.id')
-                ->where("username like '%" . $data['user'] . "%' OR nombre like '%" . $data['user'] . "%' OR apellido like '%" . $data['user'] . "%'")
-                ->paginate($data['rows']);
-        } else {
-            $data['usuarios'] = $usuarioModel->select('usuario.*, perfil.perfil')
-                ->join('perfil', 'usuario.perfil_id = perfil.id')
-                ->paginate($data['rows']);
-        }
-        $paginador = $usuarioModel->pager;
-        $data['paginador'] = $paginador;
-
         $data['vista'] = 'usuario';
-        $estructura = view('estructura/header', $data) . view('estructura/modals') . view('Usuario/usuario') . view('estructura/footer');
-        return $estructura;
+        return view('Usuario/usuario', $data);
     }
 
-    public function registrar()
+    public function obtenerData()
     {
-        $data = [];
-        helper(['form']);
+        if ($this->request->isAJAX()) {
+            $usuarioModel = new UsuarioModel();
+            $data['data'] = $usuarioModel->findAll();
+            $i = 0;
+            foreach ($data['data'] as $row) {
+                $btnEditar = "";
+                $btnBorrar = "";
+                if (session()->get('admin') == 1 || session()->get('id') == $row['id']) {
+                    $btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
+                }
+                if (session()->get('admin') == 1 && session()->get('id') != $row['id']) {
+                    $btnBorrar = $row['activo'] == 1 ? '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>' : '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
+                }
+                $data['data'][$i]['admin'] = $data['data'][$i]['admin'] == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+                $data['data'][$i]['create_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['create_at']));
+                $data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo' : 'Desactivado';
+                $data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
+                $i++;
+            }
 
-        if ($this->request->getMethod() == 'post') {
-            //let's do the validation here
+            return json_encode($data);
+        } else {
+            exit();
+        }
+    }
+
+    public function agregar()
+    {
+        if ($this->request->isAJAX()) {
             $rules = [
-                'username' => 'required|min_length[3]|max_length[30]|is_unique[usuario.username]',
-                'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[usuario.email]',
-                'password' => 'required|min_length[8]|max_length[255]',
-                'password_confirm' => 'matches[password]',
-                'perfil_id' => 'required',
-                'nombre' => 'required|min_length[1]|max_length[30]',
-                'apellido' => 'required|min_length[1]|max_length[30]'
+                'nombre' => 'required|max_length[50]',
+                'apellido' => 'required|max_length[50]',
+                'username' => 'required|max_length[50]|is_unique[usuario.username]',
+                'email' => 'required|valid_email|max_length[255]|is_unique[usuario.email]',
+                'password' => 'required|min_length[8]',
+                'password_confirm' => 'required|matches[password]'
             ];
-
-            $errors = [
-                'username' => [
-                    'required' => 'Debe ingresar el nombre de usuario',
-                    'min_length' => 'Debe ingresar minimo 3 caracteres para el nombre de usuario',
-                    'max_length' => 'Debe ingresar maximo 30 caracteres para el nombre de usuario',
-                    'is_unique' => 'El nombre de usuario ya esta en uso',
-                ],
-                'email' => [
-                    'required' => 'Debe ingresar el email',
-                    'min_length' => 'Debe ingresar minimo 6 caracteres para el email',
-                    'max_length' => 'Debe ingresar maximo 50 caracteres para el email',
-                    'is_unique' => 'El email ya esta en uso',
-                    'valid_email' => 'El email no cumple con el formato de una email valido'
-                ],
-                'password' => [
-                    'required' => 'Debe ingresar una contraseña',
-                    'min_length' => 'Debe ingresar minimo 8 caracteres para la contraseña',
-                ],
-                'password_confirm' => [
-                    'matches' => 'Las contraseñas no coinciden',
-                ],
+            $messages = [
                 'nombre' => [
-                    'required' => 'Debe ingresar el nombre',
-                    'min_length' => 'Debe ingresar minimo 1 caracteres para el nombre',
-                    'max_length' => 'Debe ingresar maximo 30 caracteres para el nombre',
+                    'required' => 'Debe ingresar el Nombre',
+                    'max_length' => 'Nombre excede el largo de 50 caracteres'
                 ],
                 'apellido' => [
-                    'required' => 'Debe ingresar el apellido',
-                    'min_length' => 'Debe ingresar minimo 1 caracteres para el apellido',
-                    'max_length' => 'Debe ingresar maximo 30 caracteres para el apellido',
+                    'required' => 'Debe ingresar el Apellido',
+                    'max_length' => 'Apellido excede el largo de 50 caracteres'
                 ],
-            ];
-
-            if (!$this->validate($rules, $errors)) {
-                $data['validation'] = $this->validator;
-            } else {
-                $model = new UsuarioModel($db);
-
-                $newData = [
-                    'username' => $this->request->getVar('username'),
-                    'nombre' => $this->request->getVar('nombre'),
-                    'apellido' => $this->request->getVar('apellido'),
-                    'email' => $this->request->getVar('email'),
-                    'perfil_id' => $this->request->getVar('perfil_id'),
-                    'password' => $this->request->getVar('password'),
-                ];
-                $model->save($newData);
-                session()->setFlashdata('success', "Usuario registrado Exitosamente. " . $newData['username']);
-                return redirect()->route('lista-usuarios');
-            }
-        }
-        $vista['vista'] = 'usuario';
-        $estructura = view('estructura/header', $vista) . view('Usuario/registrar', $data) . view('estructura/footer');
-        return $estructura;
-    }
-
-    public function perfil()
-    {
-        $data = [];
-        helper(['form']);
-        $user = new UsuarioModel($db);
-
-        if ($this->request->getMethod() == 'post') {
-            $id = $this->request->getPostGet('id');
-            //let's do the validation here
-            $rules = [
-                'email' => "required|min_length[6]|max_length[50]|valid_email|is_unique[usuario.email,id,$id]",
-                'perfil_id' => 'required',
-                'nombre' => 'required|min_length[3]|max_length[30]',
-                'apellido' => 'required|min_length[3]|max_length[30]'
-            ];
-            $errors = [
+                'username' => [
+                    'required' => 'Debe ingresar el Nombre de Usuario',
+                    'max_length' => 'Nombre de Usuario excede el largo de 50 caracteres',
+                    'is_unique' => 'El nombre de usuario ingresado ya esta en uso'
+                ],
                 'email' => [
-                    'required' => 'Debe ingresar el email',
-                    'min_length' => 'Debe ingresar minimo 6 caracteres para el email',
-                    'max_length' => 'Debe ingresar maximo 50 caracteres para el email',
-                    'valid_email' => 'El email no cumple con el formato de una email valido',
+                    'required' => 'Debe ingresar su Email',
+                    'valid_email' => 'Formato de email no valido',
+                    'max_length' => 'Email excede el largo de 255 caracteres',
                     'is_unique' => 'El email ingresado ya esta en uso'
                 ],
-                'nombre' => [
-                    'required' => 'Debe ingresar el nombre',
-                    'min_length' => 'Debe ingresar minimo 3 caracteres para el nombre',
-                    'max_length' => 'Debe ingresar maximo 30 caracteres para el nombre',
+                'password' => [
+                    'required' => 'Debe ingresar su contraseña',
+                    'min_length' => 'Su contraseña debe tener como minimo 8 caracteres'
                 ],
-                'apellido' => [
-                    'required' => 'Debe ingresar el apellido',
-                    'min_length' => 'Debe ingresar minimo 3 caracteres para el apellido',
-                    'max_length' => 'Debe ingresar maximo 30 caracteres para el apellido',
-                ],
+                'password_confirm' => [
+                    'required' => 'Debe confirmar su contraseña',
+                    'matches' => 'Su contraseña no coincide'
+                ]
+            ];
+            if (!$this->validate($rules, $messages)) {
+                $msg['error'] = [
+                    'nombre' => $this->validator->getError('nombre'),
+                    'apellido' => $this->validator->getError('apellido'),
+                    'username' => $this->validator->getError('username'),
+                    'email' => $this->validator->getError('email'),
+                    'password' => $this->validator->getError('password'),
+                    'password_confirm' => $this->validator->getError('password_confirm'),
+                ];
+            } else {
+                $usuarioModel = new UsuarioModel();
+                $datos = [
+                    'nombre' => $this->request->getPost('nombre'),
+                    'apellido' => $this->request->getPost('apellido'),
+                    'username' => $this->request->getPost('username'),
+                    'email' => $this->request->getPost('email'),
+                    'password' => $this->request->getPost('password'),
+                    'create_at' => date('Y-m-d H:i:s')
+                ];
+                $usuarioModel->save($datos);
+                $msg['success'] = 'Usuario Ingresado Correctamente';
+            }
+            return json_encode($msg);
+        } else {
+            exit();
+        }
+    }
+
+    public function editar()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getVar('id');
+            $usuarioModel = new UsuarioModel();
+
+            $data = $usuarioModel->find($id);
+            $msg['success'] = view("Usuario/usuario_editar", $data);
+            return json_encode($msg);
+        } else {
+            exit('Nope');
+        }
+    }
+
+    public function update()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getPost('id');
+            $rules = [
+                'nombre' => 'required|max_length[50]',
+                'apellido' => 'required|max_length[50]',
+                'email' => "required|valid_email|max_length[255]|is_unique[usuario.email,id,$id]",
             ];
 
-            if ($this->request->getPost('password') != '') {
-                $rules['password'] = 'required|min_length[8]|max_length[255]';
-                $rules['password_confirm'] = 'matches[password]';
-                $errors = [
+            $messages = [
+                'nombre' => [
+                    'required' => 'Debe ingresar el Nombre',
+                    'max_length' => 'Nombre excede el largo de 50 caracteres'
+                ],
+                'apellido' => [
+                    'required' => 'Debe ingresar el Apellido',
+                    'max_length' => 'Apellido excede el largo de 50 caracteres'
+                ],
+                'email' => [
+                    'required' => 'Debe ingresar su Email',
+                    'valid_email' => 'Formato de email no valido',
+                    'max_length' => 'Email excede el largo de 255 caracteres',
+                    'is_unique' => 'El email ingresado ya esta en uso'
+                ]
+            ];
+            if ($this->request->getPost('check-pass') !== null) {
+                $rules = [
+                    'password' => 'required|validatePass[$id,password]',
+                    'new_password' => 'required|min_length[8]',
+                    'password_confirm' => 'required|matches[new_password]'
+                ];
+                $messages = [
                     'password' => [
-                        'required' => 'Debe ingresar una contraseña',
-                        'min_length' => 'Debe ingresar minimo 8 caracteres para la contraseña',
+                        'required' => 'Debe ingresar su contraseña actual',
+                        'validatePass' => 'Su contraseña es erronea',
+                    ],
+                    'new_password' => [
+                        'required' => 'Debe ingresar su nueva contraseña',
+                        'min_length' => 'Su contraseña debe tener como minimo 8 caracteres'
                     ],
                     'password_confirm' => [
-                        'matches' => 'Las contraseñas no coinciden',
+                        'required' => 'Debe confirmar su contraseña',
+                        'matches' => 'Su contraseña no coincide'
                     ]
                 ];
             }
-
-            if (!$this->validate($rules, $errors)) {
-                $data['validation'] = $this->validator;
-            } else {
-                $model = new UsuarioModel($db);
-
-                $newData = [
-                    'nombre' => $this->request->getVar('nombre'),
-                    'apellido' => $this->request->getVar('apellido'),
-                    'email' => $this->request->getVar('email'),
-                    'perfil_id' => $this->request->getVar('perfil_id'),
+            if (!$this->validate($rules, $messages)) {
+                $msg['error'] = [
+                    'nombre' => $this->validator->getError('nombre'),
+                    'apellido' => $this->validator->getError('apellido'),
+                    'email' => $this->validator->getError('email'),
+                    'password' => $this->validator->getError('password'),
+                    'new_password' => $this->validator->getError('new_password'),
+                    'password_confirm' => $this->validator->getError('password_confirm'),
                 ];
-                if ($this->request->getPost('password') != '') {
-                    $newData['password'] = $this->request->getPost('password');
+            } else {
+                $usuarioModel = new UsuarioModel();
+                $datos = [
+                    'nombre' => $this->request->getPost('nombre'),
+                    'apellido' => $this->request->getPost('apellido'),
+                    'email' => $this->request->getPost('email'),
+                ];
+                if($this->request->getPost('password')){
+                    $datos['password'] = $this->request->getPost('new_password');
                 }
-                $model->update($id, $newData);
-                session()->setFlashdata('success', '¡Actualización exitosa! Los cambios en la sesión seran reflejados al volver a entrar');
+                $usuarioModel->update($id, $datos);
+                $msg['success'] = "Usuario #{$id} modificado exitosamente";
             }
+            return json_encode($msg);
+        } else {
+            exit('Nope');
         }
-        $id = $this->request->getPostGet('id');
-        $data['user'] = $user->find($id);
-        $perfil = new PerfilModel($db);
-        $data['perfiles'] = $perfil->where('estado', '0')->findAll();
-        $vista['vista'] = 'usuario';
-        $estructura = view('estructura/header', $vista) . view('Usuario/perfil', $data) . view('estructura/footer');
-        return $estructura;
     }
+
+    public function borrar()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$usuarioModel = new UsuarioModel();
+
+			$data = $usuarioModel->find($id);
+			$msg['success'] = view("Usuario/usuario_borrar", $data);
+			return json_encode($msg);
+		} else {
+			exit('Nope');
+		}
+	}
+
+	public function delete()
+	{
+		if ($this->request->isAjax()) {
+			$usuarioModel = new UsuarioModel();
+			$id = $this->request->getVar('id');
+			$usuario = $usuarioModel->find($id);
+			if ($usuario) {
+				if ($usuario['activo'] == 1) {
+					$usuarioModel->update($id, ['activo' => 0]);
+					$msg['success'] = "Usuario #{$id} desactivado";
+				} else {
+					$usuarioModel->update($id, ['activo' => 1]);
+					$msg['success'] = "Usuario #{$id} activado";
+				}
+			} else {
+				$msg['error'] = "Error al intentar modificar categoria #{$id}";
+			}
+			return json_encode($msg);
+		} else {
+			exit('Nope');
+		}
+	}
 
     public function logout()
     {

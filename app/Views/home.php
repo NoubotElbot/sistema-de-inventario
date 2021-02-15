@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/master') ?>
 
 <?= $this->section('titulo') ?>
-Hello World!
+Inicio
 <?= $this->endSection() ?>
 <?= $this->section('contenido') ?>
 <div class="app-page-title">

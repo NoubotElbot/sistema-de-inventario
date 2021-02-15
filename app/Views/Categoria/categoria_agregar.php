@@ -42,6 +42,9 @@
     </div>
 </div>
 <script type="text/javascript">
+    $('.close-modal').mousedown(function(e) {
+        document.getElementById("categoria-agregar").reset();
+    });
     $('#categoria-agregar').submit(function(e) {
         e.preventDefault();
         $.ajax({
@@ -75,11 +78,11 @@
                         $('.validationDescripcion').html('');
                     }
                 } else {
-                    $(".close-modal").click();
+                    $("#categoria-agregar-modal").click();
                     document.getElementById("categoria-agregar").reset();
                     $('.cuadro-alertas').show();
                     $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
-                    cargarDatos();
+                    table.ajax.reload(null, false);
                 }
             },
             error: function(xhr, ajaxOption, thrownError) {

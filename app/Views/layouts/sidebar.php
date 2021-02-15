@@ -40,10 +40,35 @@
                     </a>
                 </li>
                 <li class="app-sidebar__heading">MENU</li>
-                <li <?= strpos($vista, 'categoria') !== false ? 'class="mm-active"' : '' ?>>
-                    <a href="<?= base_url() . '/categoria' ?>" <?= $vista == 'categoria-lista' ? 'class="mm-active"' : '' ?>>
+                <li>
+                    <a href="<?= base_url() . '/categoria' ?>" <?= $vista == 'categoria' ? 'class="mm-active"' : '' ?>>
                     <i class="metismenu-icon pe-7s-diamond"></i>
-                        Listar Categorias
+                        Categorias
+                    </a>
+                </li>
+                <li>
+                    <a href="#" <?= $vista == 'producto' ? 'class="mm-active"' : '' ?>>
+                    <i class="metismenu-icon pe-7s-ticket"></i>
+                        Productos
+                    </a>
+                </li>
+                <li>
+                    <a href="#" <?= $vista == 'venta' ? 'class="mm-active"' : '' ?>>
+                    <i class="metismenu-icon pe-7s-cash"></i>
+                        Ventas
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('persona') ?>" <?= $vista == 'pesona' ? 'class="mm-active"' : '' ?>>
+                    <i class="metismenu-icon pe-7s-users"></i>
+                        Clientes y Provedores
+                    </a>
+                </li>
+                <li class="app-sidebar__heading">SISTEMA</li>
+                <li>
+                    <a href="<?= base_url('usuario') ?>" <?= $vista == 'usuario' ? 'class="mm-active"' : '' ?>>
+                    <i class="metismenu-icon pe-7s-user"></i>
+                        Usuarios
                     </a>
                 </li>
             </ul>

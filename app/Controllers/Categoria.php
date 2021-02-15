@@ -8,10 +8,7 @@ class Categoria extends BaseController
 {
 	public function index()
 	{
-		$data['vista'] = 'categoria-lista';
-		// $categoriaModel = new CategoriaModel();
-		// $data['categorias'] = $categoriaModel->findAll();
-
+		$data['vista'] = 'categoria';
 		return view('Categoria/categoria', $data);
 	}
 
@@ -19,11 +16,28 @@ class Categoria extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$categoriaModel = new CategoriaModel();
-			$data['categorias'] = $categoriaModel->findAll();
-			$msg['data'] = view('Categoria/categoria_lista', $data);
-			return json_encode($msg);
+			$data['data'] = $categoriaModel->findAll();
+			$i = 0;
+			foreach ($data['data'] as $row) {
+				$btnEditar = "";
+				$btnBorrar = "";
+				if (session()->get('admin') == 1) {
+					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
+					if ($row['activo'] == 1) {
+						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
+					} else {
+						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
+					}
+				}
+				$data['data'][$i]['create_at'] = date('d/m/Y H:i:s',strtotime($data['data'][$i]['create_at']));
+				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo':'Desactivado';
+				$data['data'][$i]['opciones'] = '<div class="btn-group">'.$btnEditar.$btnBorrar.'</div>';
+				$i ++;
+			}
+
+			return json_encode($data);
 		} else {
-			exit('error');
+			exit();
 		}
 	}
 
@@ -143,8 +157,7 @@ class Categoria extends BaseController
 					$categoriaModel->update($id, ['activo' => 1]);
 					$msg['success'] = "Categoria #{$id} activada";
 				}
-				
-			}else{
+			} else {
 				$msg['error'] = "Error al intentar modificar categoria #{$id}";
 			}
 			return json_encode($msg);

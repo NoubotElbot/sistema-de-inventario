@@ -1,4 +1,4 @@
-<div class="modal fade" id="categoria-editar-modal" tabindex="999" aria-labelledby="" aria-hidden="true">
+<div class="modal fade" id="categoria-editar-modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -80,7 +80,7 @@
                     $("#categoria-editar-modal").modal('hide');
                     $('.cuadro-alertas').show();
                     $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
-                    cargarDatos();
+                    table.ajax.reload(null, false );
                 }
             },
             error: function(xhr, ajaxOption, thrownError) {
