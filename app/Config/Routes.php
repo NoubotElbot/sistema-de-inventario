@@ -60,7 +60,15 @@ $routes->post('persona/editar', 'Persona::editar', ['filter' => 'super']);
 $routes->put('persona/update', 'Persona::update', ['filter' => 'super']);
 $routes->post('persona/borrar', 'Persona::borrar', ['filter' => 'super']);
 $routes->delete('persona/delete', 'Persona::delete', ['filter' => 'super']);
-
+/* Producto */
+$routes->get('producto', 'Producto::index', ['filter' => 'auth']);
+$routes->post('producto/lista', 'Producto::obtenerData', ['filter' => 'auth']);
+$routes->get('producto/new', 'Producto::new', ['filter' => 'super']);
+$routes->post('producto/agregar', 'Producto::agregar', ['filter' => 'super']);
+$routes->post('producto/editar', 'Producto::editar', ['filter' => 'super']);
+$routes->put('producto/update', 'Producto::update', ['filter' => 'super']);
+$routes->post('producto/borrar', 'Producto::borrar', ['filter' => 'super']);
+$routes->delete('producto/delete', 'Producto::delete', ['filter' => 'super']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing

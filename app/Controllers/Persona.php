@@ -22,18 +22,18 @@ class Persona extends BaseController
 				$btnEditar = "";
 				$btnBorrar = "";
 				if (session()->get('admin') == 1) {
-					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
+					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
 					if ($row['activo'] == 1) {
-						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
+						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
 					} else {
-						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
+						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
 					}
 				}
-                $data['data'][$i]['tipo'] = $data['data'][$i]['tipo'] == 1 ? 'Cliente' : 'Provedor';
-				$data['data'][$i]['create_at'] = date('d/m/Y H:i:s',strtotime($data['data'][$i]['create_at']));
-				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo':'Desactivado';
-				$data['data'][$i]['opciones'] = '<div class="btn-group">'.$btnEditar.$btnBorrar.'</div>';
-				$i ++;
+				$data['data'][$i]['tipo'] = $data['data'][$i]['tipo'] == 1 ? 'Cliente' : 'Provedor';
+				$data['data'][$i]['create_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['create_at']));
+				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo' : 'Desactivado';
+				$data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
+				$i++;
 			}
 
 			return json_encode($data);
@@ -47,21 +47,61 @@ class Persona extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$rules = [
-				'nombre' => 'required',
+				'nombre' => 'required|max_length[50]',
+				'apellido' => 'required|max_length[50]',
+				'tipo' => 'required',
+				'telefono' => 'required',
+				'email' => 'required|valid_email|is_unique[persona.email]',
+
 			];
+
 			$messages = [
 				'nombre' => [
-					'required' => 'Debe ingresar el nombre'
+					'required' => 'Debe ingresar el nombre',
+					'max_length' => 'Excede los 50 caracteres permitidos para Nombre'
+				],
+				'apellido' => [
+					'required' => 'Debe ingresar el apellido',
+					'max_length' => 'Excede los 50 caracteres permitidos para Apellido'
+				],
+				'tipo' => [
+					'required' => 'Debe seleccionar el tipo'
+				],
+				'email' => [
+					'required' => 'Debe ingresar un email',
+					'valid_email' => 'Debe ingresar un email valido',
+					'is_unique' => 'El email ingresado ya esta en uso'
+				],
+				'telefono' => [
+					'required' => 'Debe ingresar el teléfono'
 				],
 			];
+			if ($this->request->getPost('tipo') == 0) {
+				$rules['company'] = 'required';
+				$messages['company'] =  [
+					'required' => 'Debe ingresar el nombre de la compañia u empresa del provedor'
+				];
+			}
 			if (!$this->validate($rules, $messages)) {
 				$msg['error'] = [
 					'nombre' => $this->validator->getError('nombre'),
+					'apellido' => $this->validator->getError('apellido'),
+					'tipo' => $this->validator->getError('tipo'),
+					'telefono' => $this->validator->getError('telefono'),
+					'email' => $this->validator->getError('email'),
+					'direccion' => $this->validator->getError('direccion'),
+					'company' => $this->validator->getError('company'),
 				];
 			} else {
 				$personaModel = new PersonaModel();
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
+					'apellido' => $this->request->getPost('apellido'),
+					'tipo' => $this->request->getPost('tipo'),
+					'telefono' => $this->request->getPost('telefono'),
+					'company' => $this->request->getPost('tipo') == 0 ? $this->request->getPost('company') : '',
+					'email' => $this->request->getPost('email'),
+					'direccion' => $this->request->getPost('direccion'),
 					'create_at' => date('Y-m-d H:i:s')
 				];
 				$personaModel->save($datos);
@@ -90,33 +130,67 @@ class Persona extends BaseController
 	public function update()
 	{
 		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
 			$rules = [
-				'nombre' => 'required',
-				'descripcion' => 'max_length[255]'
+				'nombre' => 'required|max_length[50]',
+				'apellido' => 'required|max_length[50]',
+				'tipo' => 'required',
+				'telefono' => 'required',
+				'email' => "required|valid_email|is_unique[persona.email,id,$id]",
+
 			];
+
 			$messages = [
 				'nombre' => [
-					'required' => 'Debe ingresar el nombre'
+					'required' => 'Debe ingresar el nombre',
+					'max_length' => 'Excede los 50 caracteres permitidos para Nombre'
 				],
-				'descripcion' => [
-					'max_length' => 'Descripcion excede el largo de 255 caracteres'
-				]
+				'apellido' => [
+					'required' => 'Debe ingresar el apellido',
+					'max_length' => 'Excede los 50 caracteres permitidos para Apellido'
+				],
+				'tipo' => [
+					'required' => 'Debe seleccionar el tipo'
+				],
+				'email' => [
+					'required' => 'Debe ingresar un email',
+					'valid_email' => 'Debe ingresar un email valido',
+					'is_unique' => 'El email ingresado ya esta en uso'
+				],
+				'telefono' => [
+					'required' => 'Debe ingresar el teléfono'
+				],
 			];
+			if ($this->request->getPost('tipo') == 0) {
+				$rules['company'] = 'required';
+				$messages['company'] =  [
+					'required' => 'Debe ingresar el nombre de la compañia u empresa del provedor'
+				];
+			}
 			if (!$this->validate($rules, $messages)) {
 				$msg['error'] = [
 					'nombre' => $this->validator->getError('nombre'),
-					'descripcion' => $this->validator->getError('descripcion'),
+					'apellido' => $this->validator->getError('apellido'),
+					'tipo' => $this->validator->getError('tipo'),
+					'telefono' => $this->validator->getError('telefono'),
+					'email' => $this->validator->getError('email'),
+					'direccion' => $this->validator->getError('direccion'),
+					'company' => $this->validator->getError('company'),
 				];
 			} else {
 				$personaModel = new PersonaModel();
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
-					'descripcion' => $this->request->getPost('descripcion'),
+					'apellido' => $this->request->getPost('apellido'),
+					'tipo' => $this->request->getPost('tipo'),
+					'telefono' => $this->request->getPost('telefono'),
+					'company' => $this->request->getPost('tipo') == 0 ? $this->request->getPost('company') : '',
+					'email' => $this->request->getPost('email'),
+					'direccion' => $this->request->getPost('direccion'),
 					'create_at' => date('Y-m-d H:i:s')
 				];
-				$id = $this->request->getPost('id');
 				$personaModel->update($id, $datos);
-				$msg['success'] = "Persona #{$id} modificada exitosamente";
+				$msg['success'] = 'Registro actualizado correctamnete';
 			}
 			return json_encode($msg);
 		} else {

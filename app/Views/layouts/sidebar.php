@@ -34,20 +34,20 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Dashboard</li>
                 <li>
-                    <a href="<?= base_url() ?>" <?= $vista == 'home' ? 'class="mm-active"' : '' ?>>
+                    <a href="<?= base_url('home') ?>" <?= $vista == 'home' ? 'class="mm-active"' : '' ?>>
                         <i class="metismenu-icon pe-7s-rocket"></i>
                         Home
                     </a>
                 </li>
                 <li class="app-sidebar__heading">MENU</li>
                 <li>
-                    <a href="<?= base_url() . '/categoria' ?>" <?= $vista == 'categoria' ? 'class="mm-active"' : '' ?>>
+                    <a href="<?= base_url('categoria') ?>" <?= $vista == 'categoria' ? 'class="mm-active"' : '' ?>>
                     <i class="metismenu-icon pe-7s-diamond"></i>
                         Categorias
                     </a>
                 </li>
                 <li>
-                    <a href="#" <?= $vista == 'producto' ? 'class="mm-active"' : '' ?>>
+                    <a href="<?= base_url('producto') ?>" <?= $vista == 'producto' ? 'class="mm-active"' : '' ?>>
                     <i class="metismenu-icon pe-7s-ticket"></i>
                         Productos
                     </a>

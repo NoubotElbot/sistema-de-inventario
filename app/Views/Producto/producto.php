@@ -1,28 +1,29 @@
 <?= $this->extend('layouts/master') ?>
 
 <?= $this->section('titulo') ?>
-Usuarios
+Productos
 <?= $this->endSection() ?>
 <?= $this->section('contenido') ?>
+
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-diamond icon-gradient bg-mean-fruit">
+                <i class="pe-7s-ticket icon-gradient bg-mean-fruit">
                 </i>
             </div>
-            <div>Usuarios
-                <div class="page-title-subheading">Listado de todos los Usuarios del Sistema
+            <div>Productos
+                <div class="page-title-subheading">Listado de todas tus Productos
                 </div>
             </div>
         </div>
         <div class="page-title-actions">
             <?php if (session()->get('admin') == 1) : ?>
-                <button type="button" class="btn-shadow btn btn-primary" data-toggle="modal" data-target="#usuario-agregar-modal">
+                <button type="button" class="btn-shadow btn btn-primary" onclick="nuevo('<?= base_url('producto/new') ?>')">
                     <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-plus-circle fa-w-20"></i>
                     </span>
-                    Nuevo Usuario
+                    Nuevo Producto
                 </button>
             <?php endif; ?>
         </div>
@@ -37,18 +38,19 @@ Usuarios
     <div class="col">
         <div class="main-card mb-3 card">
             <div class="card-body viewdata">
-                <h5 class="card-title">Usuarios</h5>
+                <h5 class="card-title">Productos</h5>
                 <div class="table-responsive">
                     <table class="mb-0 table table-bordered text-center" id="myTable" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Username</th>
                                 <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Email</th>
-                                <th>Admin</th>
-                                <th>Creación</th>
+                                <th>Descripcion</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Stock Critico</th>
+                                <th>Categoria</th>
+                                <th>Usuario</th>
                                 <th>Estado</th>
                                 <th>Opciones</th>
                             </tr>
@@ -64,20 +66,15 @@ Usuarios
 
 <?= $this->section('scripts') ?>
 <script type="text/javascript">
-    function edit(id) {
+    function nuevo(url) {
         $.ajax({
-            type: "POST",
-            url: "<?= base_url('usuario/editar') ?>",
-            data: {
-                id: id,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
-            },
+            type: "GET",
+            url: url,
             dataType: "json",
             success: function(response) {
                 if (response.success) {
                     $('.viewmodal').html(response.success);
-                    $('#usuario-editar-modal').modal('show');
-
+                    $('#producto-agregar-modal').modal('show');
                 }
             },
             error: function(xhr, ajaxOption, thrownError) {
@@ -86,19 +83,40 @@ Usuarios
         });
     }
 
-    function activar_desactivar(id) {
+    function edit(id, url, token) {
         $.ajax({
             type: "POST",
-            url: "<?= base_url('usuario/borrar') ?>",
+            url: url,
             data: {
                 id: id,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                csrf_test_name: token
             },
             dataType: "json",
             success: function(response) {
                 if (response.success) {
                     $('.viewmodal').html(response.success);
-                    $('#usuario-borrar-modal').modal('show');
+                    $('#producto-editar-modal').modal('show');
+                }
+            },
+            error: function(xhr, ajaxOption, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+    }
+
+    function activar_desactivar(id, url, token) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                id: id,
+                csrf_test_name: token
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    $('.viewmodal').html(response.success);
+                    $('#producto-borrar-modal').modal('show');
                 }
             },
             error: function(xhr, ajaxOption, thrownError) {
@@ -240,7 +258,7 @@ Usuarios
             "thousands": "."
         },
         ajax: {
-            url: '<?= site_url('usuario/lista') ?>',
+            url: '<?= site_url('producto/lista') ?>',
             type: "POST",
             data: {
                 <?= csrf_token() ?>: "<?= csrf_hash() ?>"
@@ -251,22 +269,25 @@ Usuarios
                 "data": "id"
             },
             {
+                "data": "nombre_producto"
+            },
+            {
+                "data": "descripcion"
+            },
+            {
+                "data": "precio"
+            },
+            {
+                "data": "stock"
+            },
+            {
+                "data": "stock_critico"
+            },
+            {
+                "data": "categoria"
+            },
+            {
                 "data": "username"
-            },
-            {
-                "data": "nombre"
-            },
-            {
-                "data": "apellido"
-            },
-            {
-                "data": "email"
-            },
-            {
-                "data": "admin"
-            },
-            {
-                "data": "create_at"
             },
             {
                 "data": "activo"
@@ -293,6 +314,5 @@ Usuarios
 </script>
 <?= $this->endSection() ?>
 <?= $this->section('modals') ?>
-<?= $this->include('Usuario/usuario_agregar') ?>
 <div class="viewmodal"></div>
 <?= $this->endSection() ?>
