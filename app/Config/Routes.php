@@ -7,8 +7,7 @@ $routes = Services::routes();
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
-if (file_exists(SYSTEMPATH . 'Config/Routes.php'))
-{
+if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
 	require SYSTEMPATH . 'Config/Routes.php';
 }
 
@@ -33,8 +32,8 @@ $routes->setAutoRoute(false);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 /* Usuarios */
-$routes->match(['get','post'],'/', 'Usuario::login', ['as'=>'login','filter' => 'noauth']);
-$routes->get('logout', 'Usuario::logout', ['as'=>'logout']);
+$routes->match(['get', 'post'], '/', 'Usuario::login', ['as' => 'login', 'filter' => 'noauth']);
+$routes->get('logout', 'Usuario::logout', ['as' => 'logout']);
 $routes->get('usuario', 'Usuario::index', ['filter' => 'auth']);
 $routes->post('usuario/lista', 'Usuario::obtenerData', ['filter' => 'auth']);
 $routes->post('usuario/agregar', 'Usuario::agregar', ['filter' => 'super']);
@@ -43,7 +42,7 @@ $routes->put('usuario/update', 'Usuario::update', ['filter' => 'auth']);
 $routes->post('usuario/borrar', 'Usuario::borrar', ['filter' => 'super']);
 $routes->delete('usuario/delete', 'Usuario::delete', ['filter' => 'super']);
 /* Home */
-$routes->get('home', 'Home::index', ['as'=>'home','filter' => 'auth']);
+$routes->get('home', 'Home::index', ['as' => 'home', 'filter' => 'auth']);
 /* Categoria */
 $routes->get('categoria', 'Categoria::index', ['filter' => 'auth']);
 $routes->post('categoria/lista', 'Categoria::obtenerData', ['filter' => 'auth']);
@@ -69,6 +68,11 @@ $routes->post('producto/editar', 'Producto::editar', ['filter' => 'super']);
 $routes->put('producto/update', 'Producto::update', ['filter' => 'super']);
 $routes->post('producto/borrar', 'Producto::borrar', ['filter' => 'super']);
 $routes->delete('producto/delete', 'Producto::delete', ['filter' => 'super']);
+/* Venta */
+$routes->get('venta', 'Venta::index', ['filter' => 'auth']);
+$routes->post('venta/lista', 'Venta::obtenerData', ['filter' => 'auth']);
+$routes->match(['get','post'],'venta/registrar', 'Venta::create', ['filter' => 'auth']);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
@@ -82,7 +86,6 @@ $routes->delete('producto/delete', 'Producto::delete', ['filter' => 'super']);
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */
-if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
-{
+if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
 	require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }

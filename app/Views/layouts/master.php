@@ -9,7 +9,7 @@
     <title>SICV | <?= $this->renderSection('titulo') ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="msapplication-tap-highlight" content="no">
-
+    <link rel="shortcut icon" href="<?=base_url('images/logo.png')?>" type="image/png">
     <link href="<?= base_url() . '/css/main.css' ?>" rel="stylesheet">
     <link href="<?= base_url() . '/css/micss.css' ?>" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>/DataTables/DataTables-1.10.23/css/dataTables.bootstrap4.min.css" />

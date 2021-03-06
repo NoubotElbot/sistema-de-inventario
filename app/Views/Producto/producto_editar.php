@@ -1,4 +1,4 @@
-<div class="modal fade" id="producto-agregar-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="producto-editar-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,13 +8,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h5 class="card-title">Nuevo Producto</h5>
-                <?= form_open('producto/agregar', ['id' => 'producto-agregar']) ?>
+                <h5 class="card-title">Editar Producto <?= $producto['nombre_producto'] ?></h5>
+                <?= form_open('producto/update', ['id' => 'producto-editar']) ?>
+                <input type="hidden" name="_method" value="PUT" readonly/>
+                <input name="id" id="id-edit" type="hidden" class="form-control" value="<?= $producto['id'] ?>" readonly>
                 <div class="form-row">
                     <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="nombre_producto">Nombre del producto</label>
-                            <input name="nombre_producto" id="nombre_producto" placeholder="Ingrese el nombre" type="text" class="form-control">
+                            <input name="nombre_producto" id="nombre_producto_edit" placeholder="Ingrese el nombre" type="text" class="form-control" value="<?= $producto['nombre_producto'] ?>">
                             <div class="invalid-feedback validationNombre">
 
                             </div>
@@ -23,13 +25,13 @@
                     <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="categoria">Categoria</label>
-                            <select class="custom-select" name="categoria" id="categoria">
+                            <select class="custom-select" name="categoria" id="categoria_edit">
                                 <option> ------ </option>
                                 <?php foreach ($categorias as $categoria) : ?>
-                                    <option value="<?= $categoria['id']?>"><?= $categoria['nombre']?></option>
+                                    <option value="<?= $categoria['id'] ?>" <?= $categoria['id'] == $producto['categoria_id'] ? 'selected':'' ?>><?= $categoria['nombre'] ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <div class="invalid-feedback validationCategoria">
+                            <div class="invalid-feedback validationPrecio">
 
                             </div>
                         </div>
@@ -39,7 +41,7 @@
                     <div class="col-md-12">
                         <div class="position-relative form-group">
                             <label for="descripcion" class="">Descripción</label>
-                            <textarea name="descripcion" id="descripcion" placeholder="Ingrese la descripción de producto (Opcional)" class="form-control" rows="5"></textarea>
+                            <textarea name="descripcion" id="descripcion_edit" placeholder="Ingrese la descripción de producto (Opcional)" class="form-control" rows="5"><?= $producto['descripcion'] ?></textarea>
                             <div class="invalid-feedback validationDescripcion">
 
                             </div>
@@ -50,7 +52,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="precio">Precio</label>
-                            <input type="number" id="precio" name="precio" class="form-control">
+                            <input type="number" id="precio_edit" name="precio" class="form-control" value="<?= $producto['precio'] ?>">
                             <div class="invalid-feedback validationPrecio">
 
                             </div>
@@ -59,7 +61,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="stock" class="">Stock</label>
-                            <input name="stock" id="stock" type="number" class="form-control">
+                            <input name="stock" id="stock_edit" type="number" class="form-control" value="<?= $producto['stock'] ?>">
                             <div class="invalid-feedback validationStock">
 
                             </div>
@@ -69,7 +71,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="stock_critico" class="">Stock Critico</label>
-                            <input name="stock_critico" id="stock_critico" type="number" class="form-control">
+                            <input name="stock_critico" id="stock_critico_edit" type="number" class="form-control" value="<?= $producto['stock_critico'] ?>">
                             <div class="invalid-feedback validationStockCritico">
 
                             </div>
@@ -80,7 +82,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Cancelar</button>
-                <button form="producto-agregar" type="submit" class="btn btn-primary btnsubmit">Guardar</button>
+                <button form="producto-editar" type="submit" class="btn btn-primary btnsubmit">Guardar</button>
             </div>
         </div>
     </div>
@@ -89,7 +91,7 @@
     $('.close-modal').mousedown(function(e) {
         document.getElementById("producto-agregar").reset();
     });
-    $('#producto-agregar').submit(function(e) {
+    $('#producto-editar').submit(function(e) {
         e.preventDefault();
         $.ajax({
             type: "POST",
@@ -107,34 +109,34 @@
             success: function(response) {
                 if (response.error) {
                     if (response.error.nombre_producto) {
-                        $('#nombre_producto').addClass('is-invalid');
+                        $('#nombre_producto_edit').addClass('is-invalid');
                         $('.validationNombre').html(response.error.nombre_producto);
                     } else {
-                        $('#nombre_producto').removeClass('is-invalid');
+                        $('#nombre_producto_edit').removeClass('is-invalid');
                         $('.validationNombre').html('');
                     }
 
                     if (response.error.categoria) {
-                        $('#categoria').addClass('is-invalid');
+                        $('#categoria_edit').addClass('is-invalid');
                         $('.validationCategoria').html(response.error.categoria);
                     } else {
-                        $('#categoria').removeClass('is-invalid');
+                        $('#categoria_edit').removeClass('is-invalid');
                         $('.validationCategoria').html('');
                     }
 
                     if (response.error.precio) {
-                        $('#precio').addClass('is-invalid');
+                        $('#precio_edit').addClass('is-invalid');
                         $('.validationPrecio').html(response.error.precio);
                     } else {
-                        $('#precio').removeClass('is-invalid');
+                        $('#precio_edit').removeClass('is-invalid');
                         $('.validationPrecio').html('');
                     }
 
                     if (response.error.stock) {
-                        $('#stock').addClass('is-invalid');
+                        $('#stock_edit').addClass('is-invalid');
                         $('.validationStock').html(response.error.stock);
                     } else {
-                        $('#stock').removeClass('is-invalid');
+                        $('#stock_edit').removeClass('is-invalid');
                         $('.validationStock').html('');
                     }
 
@@ -146,8 +148,8 @@
                         $('.validationStockCritico').html('');
                     }
                 } else {
-                    $("#producto-agregar-modal").modal('hide');
-                    document.getElementById("producto-agregar").reset();
+                    $("#producto-editar-modal").modal('hide');
+                    document.getElementById("producto-editar").reset();
                     $('.cuadro-alertas').show();
                     $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
                     table.ajax.reload(null, false);

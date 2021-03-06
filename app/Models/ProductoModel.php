@@ -14,4 +14,5 @@ class ProductoModel extends Model
     protected $returnType     = 'array';
 
     protected $allowedFields = ['nombre_producto', 'descripcion', 'precio', 'stock', 'stock_critico', 'usuario_id', 'categoria_id', 'activo', 'create_at'];
+    protected $useTimestamps = true;
 }

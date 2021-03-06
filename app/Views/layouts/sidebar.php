@@ -53,7 +53,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" <?= $vista == 'venta' ? 'class="mm-active"' : '' ?>>
+                    <a href="<?= base_url('venta') ?>" <?= $vista == 'venta' ? 'class="mm-active"' : '' ?>>
                     <i class="metismenu-icon pe-7s-cash"></i>
                         Ventas
                     </a>
