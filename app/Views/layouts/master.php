@@ -9,33 +9,14 @@
     <title>SICV | <?= $this->renderSection('titulo') ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="msapplication-tap-highlight" content="no">
-    <link rel="shortcut icon" href="<?=base_url('images/logo.png')?>" type="image/png">
+    <link rel="shortcut icon" href="<?= base_url('images/logo.png') ?>" type="image/png">
     <link href="<?= base_url() . '/css/main.css' ?>" rel="stylesheet">
     <link href="<?= base_url() . '/css/micss.css' ?>" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>/DataTables/DataTables-1.10.23/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>/DataTables/Buttons-1.6.5/css/buttons.bootstrap4.min.css" />
 </head>
+
 <body>
-    <style>
-        .loader {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: 50% 50% rgb(254, 254, 254);
-            opacity: .8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-    <div class="loader">
-        <div class="spinner-grow text-primary" role="status">
-            <span class="visually-hidden"></span>
-        </div>
-    </div>
     
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         <?= $this->include('layouts/header') ?>
@@ -56,9 +37,6 @@
     <script type="text/javascript" src="<?= base_url() . '/js/main.js' ?>"></script>
     <script>
         $('.dropdown-toggle').dropdown()
-        $(window).ready(function() {
-            $('.loader').hide();
-        });
     </script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/JSZip-2.5.0/jszip.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/pdfmake.min.js"></script>
@@ -69,9 +47,7 @@
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/buttons.bootstrap4.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/Buttons-1.6.5/js/buttons.html5.min.js"></script>
     <?= $this->renderSection('scripts') ?>
-
     <?= $this->renderSection('modals') ?>
-
 </body>
 
 </html>

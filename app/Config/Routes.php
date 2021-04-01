@@ -71,7 +71,12 @@ $routes->delete('producto/delete', 'Producto::delete', ['filter' => 'super']);
 /* Venta */
 $routes->get('venta', 'Venta::index', ['filter' => 'auth']);
 $routes->post('venta/lista', 'Venta::obtenerData', ['filter' => 'auth']);
-$routes->match(['get','post'],'venta/registrar', 'Venta::create', ['filter' => 'auth']);
+$routes->get('venta/registrar', 'Venta::create', ['filter' => 'auth']);
+
+$routes->post('get_productos', 'Vender::obtenerProductos', ['filter' => 'auth']);
+$routes->post('get_carro', 'Vender::obtenerCarro', ['filter' => 'auth']);
+$routes->post('agregar_al_carro', 'Vender::agregarAlCarro', ['filter' => 'auth']);
+$routes->post('registrar_venta', 'Vender::registrarVetan', ['filter' => 'auth']);
 
 /*
  * --------------------------------------------------------------------

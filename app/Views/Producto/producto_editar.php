@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <h5 class="card-title">Editar Producto <?= $producto['nombre_producto'] ?></h5>
                 <?= form_open('producto/update', ['id' => 'producto-editar']) ?>
-                <input type="hidden" name="_method" value="PUT" readonly/>
+                <input type="hidden" name="_method" value="PUT" readonly />
                 <input name="id" id="id-edit" type="hidden" class="form-control" value="<?= $producto['id'] ?>" readonly>
                 <div class="form-row">
                     <div class="col-md-6">
@@ -28,7 +28,7 @@
                             <select class="custom-select" name="categoria" id="categoria_edit">
                                 <option> ------ </option>
                                 <?php foreach ($categorias as $categoria) : ?>
-                                    <option value="<?= $categoria['id'] ?>" <?= $categoria['id'] == $producto['categoria_id'] ? 'selected':'' ?>><?= $categoria['nombre'] ?></option>
+                                    <option value="<?= $categoria['id'] ?>" <?= $categoria['id'] == $producto['categoria_id'] ? 'selected' : '' ?>><?= $categoria['nombre'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <div class="invalid-feedback validationPrecio">
@@ -49,16 +49,25 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="position-relative form-group">
-                            <label for="precio">Precio</label>
-                            <input type="number" id="precio_edit" name="precio" class="form-control" value="<?= $producto['precio'] ?>">
-                            <div class="invalid-feedback validationPrecio">
+                            <label for="precio_in_edit">Precio Compra</label>
+                            <input type="number" id="precio_in_edit" name="precio_in" class="form-control" value="<?= $producto['precio_in'] ?>">
+                            <div class="invalid-feedback validationPrecioIn">
 
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+                        <div class="position-relative form-group">
+                            <label for="precio_out_edit">Precio Venta</label>
+                            <input type="number" id="precio_out_edit" name="precio_out" class="form-control" value="<?= $producto['precio_out'] ?>">
+                            <div class="invalid-feedback validationPrecioOut">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="stock" class="">Stock</label>
                             <input name="stock" id="stock_edit" type="number" class="form-control" value="<?= $producto['stock'] ?>">
@@ -68,7 +77,7 @@
 
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="stock_critico" class="">Stock Critico</label>
                             <input name="stock_critico" id="stock_critico_edit" type="number" class="form-control" value="<?= $producto['stock_critico'] ?>">
@@ -124,12 +133,20 @@
                         $('.validationCategoria').html('');
                     }
 
-                    if (response.error.precio) {
-                        $('#precio_edit').addClass('is-invalid');
-                        $('.validationPrecio').html(response.error.precio);
+                    if (response.error.precio_in) {
+                        $('#precio_in_edit').addClass('is-invalid');
+                        $('.validationPrecioIn').html(response.error.precio_in);
                     } else {
-                        $('#precio_edit').removeClass('is-invalid');
-                        $('.validationPrecio').html('');
+                        $('#precio_in_edit').removeClass('is-invalid');
+                        $('.validationPrecioIn').html('');
+                    }
+
+                    if (response.error.precio_out) {
+                        $('#precio_out_edit').addClass('is-invalid');
+                        $('.validationPrecioOut').html(response.error.precio_out);
+                    } else {
+                        $('#precio_out_edit').removeClass('is-invalid');
+                        $('.validationPrecioOut').html('');
                     }
 
                     if (response.error.stock) {

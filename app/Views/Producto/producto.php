@@ -46,7 +46,8 @@ Productos
                                 <th>#</th>
                                 <th>Nombre</th>
                                 <th>Descripcion</th>
-                                <th>Precio</th>
+                                <th>Precio Compra</th>
+                                <th>Precio Venta</th>
                                 <th>Stock</th>
                                 <th>Stock Critico</th>
                                 <th>Categoria</th>
@@ -275,7 +276,10 @@ Productos
                 "data": "descripcion"
             },
             {
-                "data": "precio"
+                "data": "precio_in"
+            },
+            {
+                "data": "precio_out"
             },
             {
                 "data": "stock"

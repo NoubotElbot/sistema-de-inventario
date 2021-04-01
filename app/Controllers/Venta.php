@@ -4,14 +4,16 @@ namespace App\Controllers;
 
 use App\Models\ProductoModel;
 use App\Models\VentaModel;
+
 class Venta extends BaseController
 {
-    public function index(){
-        $data['vista'] = 'venta';
+	public function index()
+	{
+		$data['vista'] = 'venta';
 		return view('Venta/venta', $data);
-    }
+	}
 
-    public function obtenerData()
+	public function obtenerData()
 	{
 		if ($this->request->isAJAX()) {
 			$ventaModel = new VentaModel();
@@ -22,8 +24,8 @@ class Venta extends BaseController
 			foreach ($data['data'] as $row) {
 				$btnDetalle = '<a class="btn btn-info" href="#"><i class="fas fa-clipboard-list"></i></a>';
 				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['created_at']));
-                $data['data'][$i]['opciones'] = $btnDetalle;
-                $i++;
+				$data['data'][$i]['opciones'] = $btnDetalle;
+				$i++;
 			}
 			return json_encode($data);
 		} else {
@@ -31,13 +33,10 @@ class Venta extends BaseController
 		}
 	}
 
-    public function create(){
-        if($this->request->getMethod() == 'post'){
-
-        }
-		$productoModel = new ProductoModel();
-		$data['productos'] = $productoModel->where('activo',1)->orderBy('nombre_producto')->findAll();
-        $data['vista'] = 'venta';
-		return view('Venta/venta_registrar', $data);
-    }
+	public function create()
+	{
+	
+		$data['vista'] = 'venta';
+		return view('Venta/vender', $data);
+	}
 }

@@ -13,5 +13,8 @@ class CategoriaModel extends Model
 
     protected $returnType     = 'array';
 
-    protected $allowedFields = ['nombre', 'descripcion', 'activo', 'create_at'];
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $allowedFields = ['nombre', 'descripcion', 'activo', 'created_at', 'updated_at'];
 }

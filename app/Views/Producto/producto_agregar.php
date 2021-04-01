@@ -47,26 +47,34 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="position-relative form-group">
-                            <label for="precio">Precio</label>
-                            <input type="number" id="precio" name="precio" class="form-control">
-                            <div class="invalid-feedback validationPrecio">
+                            <label for="precio_in">Precio Compra</label>
+                            <input type="number" id="precio_in" name="precio_in" class="form-control">
+                            <div class="invalid-feedback validationPrecioIn">
 
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+                        <div class="position-relative form-group">
+                            <label for="precio_out">Precio Venta</label>
+                            <input type="number" id="precio_out" name="precio_out" class="form-control">
+                            <div class="invalid-feedback validationPrecioOut">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="stock" class="">Stock</label>
                             <input name="stock" id="stock" type="number" class="form-control">
                             <div class="invalid-feedback validationStock">
 
                             </div>
-
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="stock_critico" class="">Stock Critico</label>
                             <input name="stock_critico" id="stock_critico" type="number" class="form-control">
@@ -122,12 +130,20 @@
                         $('.validationCategoria').html('');
                     }
 
-                    if (response.error.precio) {
-                        $('#precio').addClass('is-invalid');
-                        $('.validationPrecio').html(response.error.precio);
+                    if (response.error.precio_in) {
+                        $('#precio_in').addClass('is-invalid');
+                        $('.validationPrecioIn').html(response.error.precio_in);
                     } else {
-                        $('#precio').removeClass('is-invalid');
-                        $('.validationPrecio').html('');
+                        $('#precio_in').removeClass('is-invalid');
+                        $('.validationPrecioIn').html('');
+                    }
+
+                    if (response.error.precio_out) {
+                        $('#precio_out').addClass('is-invalid');
+                        $('.validationPrecioOut').html(response.error.precio_out);
+                    } else {
+                        $('#precio_out').removeClass('is-invalid');
+                        $('.validationPrecioOut').html('');
                     }
 
                     if (response.error.stock) {

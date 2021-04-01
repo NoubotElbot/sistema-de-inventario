@@ -31,7 +31,7 @@ class Persona extends BaseController
 				}
 				$data['data'][$i]['tipo'] = $data['data'][$i]['tipo'] == 1 ? 'Cliente' : 'Provedor';
 				$data['data'][$i]['company'] = $data['data'][$i]['company'] != null ? $data['data'][$i]['company'] : 'N/A';
-				$data['data'][$i]['create_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['create_at']));
+				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['created_at']));
 				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo' : 'Desactivado';
 				$data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
 				$i++;

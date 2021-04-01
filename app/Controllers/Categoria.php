@@ -29,7 +29,7 @@ class Categoria extends BaseController
 						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
 					}
 				}
-				$data['data'][$i]['create_at'] = date('d/m/Y H:i:s',strtotime($data['data'][$i]['create_at']));
+				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s',strtotime($data['data'][$i]['created_at']));
 				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo':'Desactivado';
 				$data['data'][$i]['opciones'] = '<div class="btn-group">'.$btnEditar.$btnBorrar.'</div>';
 				$i ++;
@@ -67,7 +67,6 @@ class Categoria extends BaseController
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
 					'descripcion' => $this->request->getPost('descripcion'),
-					'create_at' => date('Y-m-d H:i:s')
 				];
 				$categoriaModel->save($datos);
 				$msg['success'] = 'Datos Ingresados correctamente';
@@ -117,7 +116,6 @@ class Categoria extends BaseController
 				$datos = [
 					'nombre' => $this->request->getPost('nombre'),
 					'descripcion' => $this->request->getPost('descripcion'),
-					'create_at' => date('Y-m-d H:i:s')
 				];
 				$id = $this->request->getPost('id');
 				$categoriaModel->update($id, $datos);

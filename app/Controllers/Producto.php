@@ -67,7 +67,8 @@ class Producto extends BaseController
 			$rules = [
 				'nombre_producto' => 'required',
 				'categoria' => 'required|is_not_unique[categoria.id]',
-				'precio' => 'required|numeric|greater_than_equal_to[1]',
+				'precio_in' => 'required|numeric|greater_than_equal_to[1]',
+				'precio_out' => 'required|numeric|greater_than_equal_to[1]',
 				'stock' => 'required|numeric|greater_than_equal_to[0]',
 				'stock_critico' => 'required|numeric|greater_than_equal_to[0]',
 			];
@@ -80,8 +81,13 @@ class Producto extends BaseController
 					'required' => 'Debe seleccionar una categoría',
 					'is_not_unique' => 'Error categoría no existe'
 				],
-				'precio' => [
-					'required' => 'Debe ingresar el precio',
+				'precio_in' => [
+					'required' => 'Debe ingresar el precio de compra',
+					'numeric' => 'Precio debe ser un número',
+					'greater_than_equal_to' => 'El precio de ser igual o mayor a 1'
+				],
+				'precio_out' => [
+					'required' => 'Debe ingresar el precio de venta',
 					'numeric' => 'Precio debe ser un número',
 					'greater_than_equal_to' => 'El precio de ser igual o mayor a 1'
 				],
@@ -100,7 +106,8 @@ class Producto extends BaseController
 				$msg['error'] = [
 					'nombre_producto' => $this->validator->getError('nombre_producto'),
 					'categoria' => $this->validator->getError('categoria'),
-					'precio' => $this->validator->getError('precio'),
+					'precio_in' => $this->validator->getError('precio_in'),
+					'precio_out' => $this->validator->getError('precio_out'),
 					'stock' => $this->validator->getError('stock'),
 					'stock_critico' => $this->validator->getError('stock_critico'),
 				];
@@ -109,7 +116,8 @@ class Producto extends BaseController
 				$datos = [
 					'nombre_producto' => $this->request->getPost('nombre_producto'),
 					'categoria_id' => $this->request->getPost('categoria'),
-					'precio' => $this->request->getPost('precio'),
+					'precio_in' => $this->request->getPost('precio_in'),
+					'precio_out' => $this->request->getPost('precio_out'),
 					'stock' => $this->request->getPost('stock'),
 					'stock_critico' => $this->request->getPost('stock_critico'),
 					'usuario_id' => session('id'),
@@ -144,7 +152,8 @@ class Producto extends BaseController
 			$rules = [
 				'nombre_producto' => 'required',
 				'categoria' => 'required|is_not_unique[categoria.id]',
-				'precio' => 'required|numeric|greater_than_equal_to[1]',
+				'precio_in' => 'required|numeric|greater_than_equal_to[1]',
+				'precio_out' => 'required|numeric|greater_than_equal_to[1]',
 				'stock' => 'required|numeric|greater_than_equal_to[0]',
 				'stock_critico' => 'required|numeric|greater_than_equal_to[0]',
 			];
@@ -157,8 +166,13 @@ class Producto extends BaseController
 					'required' => 'Debe seleccionar una categoría',
 					'is_not_unique' => 'Error categoría no existe'
 				],
-				'precio' => [
-					'required' => 'Debe ingresar el precio',
+				'precio_in' => [
+					'required' => 'Debe ingresar el precio compra',
+					'numeric' => 'Precio debe ser un número',
+					'greater_than_equal_to' => 'El precio de ser igual o mayor a 1'
+				],
+				'precio_out' => [
+					'required' => 'Debe ingresar el precio de venta',
 					'numeric' => 'Precio debe ser un número',
 					'greater_than_equal_to' => 'El precio de ser igual o mayor a 1'
 				],
@@ -177,7 +191,8 @@ class Producto extends BaseController
 				$msg['error'] = [
 					'nombre_producto' => $this->validator->getError('nombre_producto'),
 					'categoria' => $this->validator->getError('categoria'),
-					'precio' => $this->validator->getError('precio'),
+					'precio_in' => $this->validator->getError('precio_in'),
+					'precio_out' => $this->validator->getError('precio_out'),
 					'stock' => $this->validator->getError('stock'),
 					'stock_critico' => $this->validator->getError('stock_critico'),
 				];
@@ -187,14 +202,15 @@ class Producto extends BaseController
 					'nombre_producto' => $this->request->getPost('nombre_producto'),
 					'categoria_id' => $this->request->getPost('categoria'),
 					'descripcion' => $this->request->getPost('descripcion'),
-					'precio' => $this->request->getPost('precio'),
+					'precio_in' => $this->request->getPost('precio_in'),
+					'precio_out' => $this->request->getPost('precio_out'),
 					'stock' => $this->request->getPost('stock'),
 					'stock_critico' => $this->request->getPost('stock_critico'),
 					'usuario_id' => session('id'),
 				];
 				$id = $this->request->getPost('id');
 				$productoModel->update($id, $datos);
-				$msg['success'] = 'Datos Ingresados correctamente';
+				$msg['success'] = "Registro #{$id} modificado correctamente";
 			}
 			return json_encode($msg);
 		} else {

@@ -12,7 +12,8 @@ class ProductoModel extends Model
     protected $useAutoIncrement = true;
 
     protected $returnType     = 'array';
-
-    protected $allowedFields = ['nombre_producto', 'descripcion', 'precio', 'stock', 'stock_critico', 'usuario_id', 'categoria_id', 'activo', 'create_at'];
     protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $allowedFields = ['nombre_producto', 'descripcion', 'precio_in','precio_out', 'stock', 'stock_critico', 'usuario_id', 'categoria_id', 'activo', 'created_at','updated_at'];
 }
