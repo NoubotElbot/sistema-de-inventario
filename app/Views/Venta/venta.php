@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/master') ?>
 
 <?= $this->section('titulo') ?>
-Ventas 
+Ventas
 <?= $this->endSection() ?>
 <?= $this->section('contenido') ?>
 <div class="app-page-title">
@@ -17,14 +17,12 @@ Ventas
             </div>
         </div>
         <div class="page-title-actions">
-            <?php if (session()->get('admin') == 1) : ?>
-                <a class="btn-shadow btn btn-primary" href="<?= base_url('venta/registrar') ?>">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-plus-circle fa-w-20"></i>
-                    </span>
-                    Vender
-                </a>
-            <?php endif; ?>
+            <a class="btn-shadow btn btn-primary" href="<?= base_url('vender') ?>">
+                <span class="btn-icon-wrapper pr-2 opacity-7">
+                    <i class="fa fa-plus-circle fa-w-20"></i>
+                </span>
+                Vender
+            </a>
         </div>
     </div>
 </div>

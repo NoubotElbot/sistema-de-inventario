@@ -33,10 +33,5 @@ class Venta extends BaseController
 		}
 	}
 
-	public function create()
-	{
-	
-		$data['vista'] = 'venta';
-		return view('Venta/vender', $data);
-	}
+
 }

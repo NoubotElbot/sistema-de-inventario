@@ -59,6 +59,7 @@ Registrar Venta
                         </tbody>
                     </table>
                 </div>
+                <h2 class="my-2" id="total"></h2>
             </div>
         </div>
     </div>
@@ -67,105 +68,9 @@ Registrar Venta
 
 <?= $this->section('scripts') ?>
 <script>
-    var token = {
-        <?= csrf_token() ?>: '<?= csrf_hash() ?>',
-    }
+    var token =  '<?= csrf_hash() ?>';
 </script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        let productos_select = $('#producto');
-        productos_select.append('<option> ------- </option>');
-        $.ajax({
-            type: "POST",
-            url: '/get_productos',
-            data: token,
-            dataType: "json",
-            success: function(data) {
-                if (data.productos) {
-                    let productos = data.productos;
-                    for (producto of productos) {
-                        productos_select.append(`<option value="${producto.id}">${producto.nombre_producto}</option>`);
-                    }
-                    actualizarTabla()
-                } else {
-                    alert(data.error)
-                }
-            },
-            error: function(xhr, ajaxOption, thrownError) {
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-            }
-        })
-
-        function actualizarTabla() {
-            let tabla = document.getElementById("tbody");
-            $.ajax({
-                type: "POST",
-                url: '/get_carro',
-                data: token,
-                dataType: "json",
-                success: function(data) {
-                    if (data.carro) {
-                        for (producto of data.carro) {
-                            let fila = `
-                            <td>${producto.id}</td>
-                            <td>${producto.nombre_producto}</td>
-                            <td>${producto.cantidad}</td>
-                            <td>${producto.precio}</td>
-                            <td>${producto.total}</td>
-                            <td>${producto.acciones}</td>
-                            `;
-                            let btn = document.createElement("TR");
-                            btn.innerHTML = fila;
-                            tabla.appendChild(btn);
-                        }
-                    } else {
-                        let fila = '<td colspan="6">No hay productos en este carro</td>';
-                        let btn = document.createElement("TR");
-                        btn.innerHTML = fila;
-                        tabla.appendChild(btn);
-                    }
-                },
-                error: function(xhr, ajaxOption, thrownError) {
-                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-                }
-            })
-        }
-        $('#venderBtn').click(function(e) {
-            let producto = $('#producto').val();
-            $.ajax({
-                type: "POST",
-                url: '/get_productos',
-                data: {
-                    id: producto,
-                    <?= csrf_token() ?>: '<?= csrf_hash() ?>',
-                },
-                dataType: "json",
-                success: function(data) {
-                    if (data.success) {
-                        var producto = data.success;
-                        document.getElementById("tabla-venta").insertRow(-1).innerHTML =
-                            `<td>${producto.id}</td>
-                         <td>${producto.nombre_producto}</td>
-                         <td></td>
-                         <td>${producto.precio}</td>
-                         <td></td>
-                         <td>
-                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                         </td>`;
-
-                    } else {
-                        alert(data.error)
-                    }
-
-                },
-                error: function(xhr, ajaxOption, thrownError) {
-                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-                }
-            })
-        })
-
-    });
-</script>
+<script src="<?= base_url('js/vender.js') ?>"></script>
 <?= $this->endSection() ?>
 <?= $this->section('modals') ?>
 <div class="modal fade" id="cancelarModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -182,7 +87,9 @@ Registrar Venta
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar vendiendo</button>
-                <a href="<?= base_url('venta') ?>" class="btn btn-warning">Cancelar Venta</a>
+                <?= form_open('cancelar-venta') ?>
+                <button type="submit" class="btn btn-warning">Cancelar Venta</button>
+                <?= form_close() ?>
             </div>
         </div>
     </div>
