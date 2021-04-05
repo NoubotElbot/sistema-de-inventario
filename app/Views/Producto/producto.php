@@ -294,7 +294,7 @@ Productos
                 "data": "username"
             },
             {
-                "data": "activo"
+                "data": "deleted_at"
             },
             {
                 "data": "opciones"

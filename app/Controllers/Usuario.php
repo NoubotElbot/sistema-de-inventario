@@ -46,7 +46,7 @@ class Usuario extends BaseController
             'username' => $user['username'],
             'nombre' => $user['nombre'],
             'apellido' => $user['apellido'],
-            'activo' => $user['activo'],
+            'activo' => $user['deleted_at'],
             'email' => $user['email'],
             'admin' => $user['admin'],
             'isLoggedIn' => true,
@@ -65,27 +65,23 @@ class Usuario extends BaseController
     {
         if ($this->request->isAJAX()) {
             $usuarioModel = new UsuarioModel();
-            $data['data'] = $usuarioModel->findAll();
-            $i = 0;
-            foreach ($data['data'] as $row) {
+            $data['data'] = $usuarioModel->withDeleted()->findAll();
+            foreach ($data['data'] as $i => $row) {
                 $btnEditar = "";
                 $btnBorrar = "";
                 if (session()->get('admin') == 1 || session()->get('id') == $row['id']) {
                     $btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
                 }
                 if (session()->get('admin') == 1 && session()->get('id') != $row['id']) {
-                    $btnBorrar = $row['activo'] == 1 ? '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>' : '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
+                    $btnBorrar = $row['deleted_at'] == null ? '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>' : '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
                 }
                 $data['data'][$i]['admin'] = $data['data'][$i]['admin'] == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                 $data['data'][$i]['created_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['created_at']));
-                $data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo' : 'Desactivado';
+                $data['data'][$i]['deleted_at'] = $data['data'][$i]['deleted_at'] == null ? 'Activo' : 'Desactivado';
                 $data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
-                $i++;
             }
 
             return json_encode($data);
-        } else {
-            exit();
         }
     }
 
@@ -145,8 +141,7 @@ class Usuario extends BaseController
                     'apellido' => $this->request->getPost('apellido'),
                     'username' => $this->request->getPost('username'),
                     'email' => $this->request->getPost('email'),
-                    'password' => $this->request->getPost('password'),
-                    'create_at' => date('Y-m-d H:i:s')
+                    'password' => $this->request->getPost('password')
                 ];
                 $usuarioModel->save($datos);
                 $msg['success'] = 'Usuario Ingresado Correctamente';
@@ -163,7 +158,7 @@ class Usuario extends BaseController
             $id = $this->request->getVar('id');
             $usuarioModel = new UsuarioModel();
 
-            $data = $usuarioModel->find($id);
+            $data = $usuarioModel->withDeleted()->find($id);
             $msg['success'] = view("Usuario/usuario_editar", $data);
             return json_encode($msg);
         } else {
@@ -252,7 +247,7 @@ class Usuario extends BaseController
 			$id = $this->request->getVar('id');
 			$usuarioModel = new UsuarioModel();
 
-			$data = $usuarioModel->find($id);
+			$data = $usuarioModel->withDeleted()->find($id);
 			$msg['success'] = view("Usuario/usuario_borrar", $data);
 			return json_encode($msg);
 		} else {
@@ -265,17 +260,17 @@ class Usuario extends BaseController
 		if ($this->request->isAjax()) {
 			$usuarioModel = new UsuarioModel();
 			$id = $this->request->getVar('id');
-			$usuario = $usuarioModel->find($id);
+			$usuario = $usuarioModel->withDeleted()->find($id);
 			if ($usuario) {
-				if ($usuario['activo'] == 1) {
-					$usuarioModel->update($id, ['activo' => 0]);
+				if ($usuario['deleted_at'] === null) {
+					$usuarioModel->delete($id);
 					$msg['success'] = "Usuario #{$id} desactivado";
 				} else {
-					$usuarioModel->update($id, ['activo' => 1]);
+					$usuarioModel->update($id, ['deleted_at' => null]);
 					$msg['success'] = "Usuario #{$id} activado";
 				}
 			} else {
-				$msg['error'] = "Error al intentar modificar categoria #{$id}";
+				$msg['error'] = "Error al intentar modificar Usuario #{$id}";
 			}
 			return json_encode($msg);
 		} else {

@@ -50,7 +50,7 @@ Personas
                                 <th>Telefono</th>
                                 <th>Email</th>
                                 <th>Tipo</th>
-                                <th>Compañia</th>
+                                <th>Empresa</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -269,7 +269,7 @@ Personas
                 "data": "tipo"
             },
             {
-                "data": "company"
+                "data": "empresa"
             },
             {
                 "data": "opciones"

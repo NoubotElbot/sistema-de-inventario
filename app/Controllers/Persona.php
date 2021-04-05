@@ -16,30 +16,23 @@ class Persona extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$personaModel = new PersonaModel();
-			$data['data'] = $personaModel->findAll();
-			$i = 0;
-			foreach ($data['data'] as $row) {
+			$data['data'] = $personaModel->withDeleted()->findAll();
+			foreach ($data['data'] as $i => $row) {
 				$btnEditar = "";
 				$btnBorrar = "";
 				if (session()->get('admin') == 1) {
 					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
-					if ($row['activo'] == 1) {
+					if ($row['deleted_at'] == null) {
 						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
 					} else {
 						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
 					}
 				}
 				$data['data'][$i]['tipo'] = $data['data'][$i]['tipo'] == 1 ? 'Cliente' : 'Provedor';
-				$data['data'][$i]['company'] = $data['data'][$i]['company'] != null ? $data['data'][$i]['company'] : 'N/A';
-				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['created_at']));
-				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo' : 'Desactivado';
+				$data['data'][$i]['empresa'] = $data['data'][$i]['empresa'] != null ? $data['data'][$i]['empresa'] : 'N/A';
 				$data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
-				$i++;
 			}
-
 			return json_encode($data);
-		} else {
-			exit();
 		}
 	}
 
@@ -100,17 +93,14 @@ class Persona extends BaseController
 					'apellido' => $this->request->getPost('apellido'),
 					'tipo' => $this->request->getPost('tipo'),
 					'telefono' => $this->request->getPost('telefono'),
-					'company' => $this->request->getPost('tipo') == 0 ? $this->request->getPost('company') : '',
+					'empresa' => $this->request->getPost('tipo') == 0 ? $this->request->getPost('company') : null,
 					'email' => $this->request->getPost('email'),
 					'direccion' => $this->request->getPost('direccion'),
-					'create_at' => date('Y-m-d H:i:s')
 				];
 				$personaModel->save($datos);
 				$msg['success'] = 'Datos Ingresados correctamente';
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -120,11 +110,9 @@ class Persona extends BaseController
 			$id = $this->request->getVar('id');
 			$personaModel = new PersonaModel;
 
-			$data = $personaModel->find($id);
+			$data = $personaModel->withDeleted()->find($id);
 			$msg['success'] = view("Persona/persona_editar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -185,17 +173,14 @@ class Persona extends BaseController
 					'apellido' => $this->request->getPost('apellido'),
 					'tipo' => $this->request->getPost('tipo'),
 					'telefono' => $this->request->getPost('telefono'),
-					'company' => $this->request->getPost('tipo') == 0 ? $this->request->getPost('company') : '',
+					'empresa' => $this->request->getPost('tipo') == 0 ? $this->request->getPost('company') : '',
 					'email' => $this->request->getPost('email'),
 					'direccion' => $this->request->getPost('direccion'),
-					'create_at' => date('Y-m-d H:i:s')
 				];
 				$personaModel->update($id, $datos);
 				$msg['success'] = 'Registro actualizado correctamnete';
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -205,11 +190,9 @@ class Persona extends BaseController
 			$id = $this->request->getVar('id');
 			$personaModel = new PersonaModel;
 
-			$data = $personaModel->find($id);
+			$data = $personaModel->withDeleted()->find($id);
 			$msg['success'] = view("Persona/persona_borrar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -218,21 +201,19 @@ class Persona extends BaseController
 		if ($this->request->isAjax()) {
 			$personaModel = new PersonaModel();
 			$id = $this->request->getVar('id');
-			$persona = $personaModel->find($id);
+			$persona = $personaModel->withDeleted()->find($id);
 			if ($persona) {
-				if ($persona['activo'] == 1) {
-					$personaModel->update($id, ['activo' => 0]);
+				if ($persona['deleted_at'] == null) {
+					$personaModel->delete($id);
 					$msg['success'] = "Persona #{$id} desactivada";
 				} else {
-					$personaModel->update($id, ['activo' => 1]);
+					$personaModel->update($id, ['deleted_at' => null]);
 					$msg['success'] = "Persona #{$id} activada";
 				}
 			} else {
 				$msg['error'] = "Error al intentar modificar persona #{$id}";
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 

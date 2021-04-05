@@ -2,14 +2,14 @@
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header">
-                <h5 class="modal-title"><?= $activo == 1 ? 'Desactivar' : 'Activar' ?> Clente/Provedor</h5>
+                <h5 class="modal-title"><?= $deleted_at == null ? 'Desactivar' : 'Activar' ?> Clente/Provedor</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <h4 class="card-title">¡Atención!</h4>
-                <h5>Esta a pundo de <?= $activo == 1 ? 'Desactivar' : 'Activar' ?> a:</h5>
+                <h5>Esta a pundo de <?= $deleted_at == null ? 'Desactivar' : 'Activar' ?> a:</h5>
                 <h5><?=$nombre.' '.$apellido.' #'.$id?></h5>
                 <?= form_open('persona/delete', ['id' => 'persona-borrar']) ?>
                 <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>

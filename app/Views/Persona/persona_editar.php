@@ -55,7 +55,7 @@
                     <div class="col-md-8">
                         <div class="position-relative form-group company" <?= $tipo == 1 ? 'style="display: none;"' : '' ?>>
                             <label for="company-edit" class="">Nombre Compañia</label>
-                            <input type="text" id="company-edit" name="company" class="form-control" <?= $tipo == 1 ? 'disabled' : '' ?> value="<?= $company ?>">
+                            <input type="text" id="company-edit" name="company" class="form-control" <?= $tipo == 1 ? 'disabled' : '' ?> value="<?= $empresa ?>">
                             <div class="invalid-feedback validationCompany">
 
                             </div>

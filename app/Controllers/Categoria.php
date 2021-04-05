@@ -16,28 +16,24 @@ class Categoria extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$categoriaModel = new CategoriaModel();
-			$data['data'] = $categoriaModel->findAll();
-			$i = 0;
-			foreach ($data['data'] as $row) {
+			$data['data'] = $categoriaModel->withDeleted()->findAll();
+			foreach ($data['data'] as $i => $row) {
 				$btnEditar = "";
 				$btnBorrar = "";
 				if (session()->get('admin') == 1) {
-					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
-					if ($row['activo'] == 1) {
-						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
+					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
+					if ($row['deleted_at'] == null) {
+						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
 					} else {
-						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar('.$row['id'].')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
+						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
 					}
 				}
-				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s',strtotime($data['data'][$i]['created_at']));
-				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo':'Desactivado';
-				$data['data'][$i]['opciones'] = '<div class="btn-group">'.$btnEditar.$btnBorrar.'</div>';
-				$i ++;
+				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['created_at']));
+				$data['data'][$i]['deleted_at'] = $data['data'][$i]['deleted_at'] == null ? 'Activo' : 'Desactivado';
+				$data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
 			}
 
 			return json_encode($data);
-		} else {
-			exit();
 		}
 	}
 
@@ -72,8 +68,6 @@ class Categoria extends BaseController
 				$msg['success'] = 'Datos Ingresados correctamente';
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -83,11 +77,9 @@ class Categoria extends BaseController
 			$id = $this->request->getVar('id');
 			$categoriaModel = new CategoriaModel;
 
-			$data = $categoriaModel->find($id);
+			$data = $categoriaModel->withDeleted()->find($id);
 			$msg['success'] = view("Categoria/categoria_editar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -122,8 +114,6 @@ class Categoria extends BaseController
 				$msg['success'] = "Categoria #{$id} modificada exitosamente";
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -133,11 +123,9 @@ class Categoria extends BaseController
 			$id = $this->request->getVar('id');
 			$categoriaModel = new CategoriaModel;
 
-			$data = $categoriaModel->find($id);
+			$data = $categoriaModel->withDeleted()->find($id);
 			$msg['success'] = view("Categoria/categoria_borrar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -146,21 +134,19 @@ class Categoria extends BaseController
 		if ($this->request->isAjax()) {
 			$categoriaModel = new CategoriaModel();
 			$id = $this->request->getVar('id');
-			$categoria = $categoriaModel->find($id);
+			$categoria = $categoriaModel->withDeleted()->find($id);
 			if ($categoria) {
-				if ($categoria['activo'] == 1) {
-					$categoriaModel->update($id, ['activo' => 0]);
+				if ($categoria['deleted_at'] == null) {
+					$categoriaModel->delete($id);
 					$msg['success'] = "Categoria #{$id} desactivada";
 				} else {
-					$categoriaModel->update($id, ['activo' => 1]);
+					$categoriaModel->update($id, ['deleted_at' => null]);
 					$msg['success'] = "Categoria #{$id} activada";
 				}
 			} else {
 				$msg['error'] = "Error al intentar modificar categoria #{$id}";
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 

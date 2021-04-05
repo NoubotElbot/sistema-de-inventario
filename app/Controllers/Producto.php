@@ -20,32 +20,29 @@ class Producto extends BaseController
 			$data['data'] = $productoModel->select('producto.*, categoria.nombre as categoria, usuario.username')
 				->join('categoria', 'categoria.id = producto.categoria_id', 'left')
 				->join('usuario', 'usuario.id = producto.usuario_id', 'left')
+				->withDeleted()
 				->findAll();
-			$i = 0;
-			foreach ($data['data'] as $row) {
+
+			foreach ($data['data'] as $i => $row) {
 				$btnEditar = "";
 				$btnBorrar = "";
 				if (session()->get('admin') == 1) {
-					
-					$paraEdit = $row['id'] . ",'" . base_url('producto/editar') . "','" . csrf_hash()."'";
-					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $paraEdit .')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
-					$paraBorrar = $row['id'] . ",'" . base_url('producto/borrar') . "','" . csrf_hash()."'";
-					if ($row['activo'] == 1) {
+
+					$paraEdit = $row['id'] . ",'" . base_url('producto/editar') . "','" . csrf_hash() . "'";
+					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $paraEdit . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
+					$paraBorrar = $row['id'] . ",'" . base_url('producto/borrar') . "','" . csrf_hash() . "'";
+					if ($row['deleted_at'] == null) {
 						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $paraBorrar . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
 					} else {
 						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $paraBorrar . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
 					}
 				}
-				// $data['data'][$i]['create_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['create_at']));
-				$data['data'][$i]['stock'] = $data['data'][$i]['stock'] <= $data['data'][$i]['stock_critico'] ? '<span class="text-danger">' . $data['data'][$i]['stock'] .' <i class="fas fa-exclamation-triangle"></i>'. '</span>' : $data['data'][$i]['stock'];
-				$data['data'][$i]['activo'] = $data['data'][$i]['activo'] == 1 ? 'Activo' : 'Desactivado';
+				$data['data'][$i]['stock'] = $data['data'][$i]['stock'] <= $data['data'][$i]['stock_critico'] ? '<span class="text-danger">' . $data['data'][$i]['stock'] . ' <i class="fas fa-exclamation-triangle"></i>' . '</span>' : $data['data'][$i]['stock'];
+				$data['data'][$i]['deleted_at'] = $data['data'][$i]['deleted_at'] == null ? 'Activo' : 'Desactivado';
 				$data['data'][$i]['opciones'] = '<div class="btn-group">' . $btnEditar . $btnBorrar . '</div>';
-				$i++;
 			}
 
 			return json_encode($data);
-		} else {
-			exit();
 		}
 	}
 
@@ -126,8 +123,6 @@ class Producto extends BaseController
 				$msg['success'] = 'Datos Ingresados correctamente';
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -138,11 +133,9 @@ class Producto extends BaseController
 			$categoriaModel = new CategoriaModel();
 			$productoModel = new ProductoModel();
 			$data['categorias'] = $categoriaModel->findAll();
-			$data['producto'] = $productoModel->find($id);
+			$data['producto'] = $productoModel->withDeleted()->find($id);
 			$msg['success'] = view("Producto/producto_editar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -213,8 +206,6 @@ class Producto extends BaseController
 				$msg['success'] = "Registro #{$id} modificado correctamente";
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 	public function borrar()
@@ -222,11 +213,9 @@ class Producto extends BaseController
 		if ($this->request->isAJAX()) {
 			$id = $this->request->getVar('id');
 			$productoModel = new ProductoModel();
-			$data = $productoModel->find($id);
+			$data = $productoModel->withDeleted()->find($id);
 			$msg['success'] = view("Producto/producto_borrar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
@@ -235,21 +224,19 @@ class Producto extends BaseController
 		if ($this->request->isAjax()) {
 			$productoModel = new ProductoModel();
 			$id = $this->request->getVar('id');
-			$producto = $productoModel->find($id);
+			$producto = $productoModel->withDeleted()->find($id);
 			if ($producto) {
-				if ($producto['activo'] == 1) {
-					$productoModel->update($id, ['activo' => 0]);
+				if ($producto['deleted_at'] == null) {
+					$productoModel->delete($id);
 					$msg['success'] = "Producto #{$id} desactivado";
 				} else {
-					$productoModel->update($id, ['activo' => 1]);
+					$productoModel->update($id, ['deleted_at' => null]);
 					$msg['success'] = "Producto #{$id} activado";
 				}
 			} else {
 				$msg['error'] = "Error al intentar modificar Producto #{$id}";
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 	//--------------------------------------------------------------------

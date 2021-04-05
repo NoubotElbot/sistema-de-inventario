@@ -269,7 +269,7 @@ Usuarios
                 "data": "created_at"
             },
             {
-                "data": "activo"
+                "data": "deleted_at"
             },
             {
                 "data": "opciones"

@@ -8,9 +8,8 @@ class UserRules {
 
     public function validateUser(string $str, string $fields, array $data) {
         $model = new UsuarioModel();
-        $user = $model->where('username', $data['username'])->where('activo',1)
+        $user = $model->where('username', $data['username'])->where('deleted_at',null)
                 ->first();
-
         if (!$user) {
             return false;
         }

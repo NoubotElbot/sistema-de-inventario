@@ -14,8 +14,23 @@ class UsuarioModel extends Model
     protected $returnType     = 'array';
     protected $beforeInsert = ['passwordHash'];
     protected $beforeUpdate = ['passwordHash'];
+    protected $allowedFields = [
+        'nombre',
+        'apellido',
+        'email', 'password',
+        'username',
+        'activo',
+        'admin',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+    protected $useSoftDeletes = true;
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
-    protected $allowedFields = ['nombre', 'apellido', 'email', 'password', 'username', 'activo', 'admin', 'create_at'];
     protected function passwordHash(array $data)
     {
         if (isset($data['data']['password'])) {
