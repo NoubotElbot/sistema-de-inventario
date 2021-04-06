@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\PersonaModel;
 use App\Models\ProductoModel;
+use App\Models\OperacionModel;
 use App\Models\VentaModel;
 
 class Vender extends BaseController
@@ -19,15 +21,27 @@ class Vender extends BaseController
         if ($this->request->isAjax()) {
             $productoModel = new ProductoModel();
             $data['productos'] = $productoModel
-                ->where('activo', 1)
                 ->where('stock > 0')
                 ->orderBy('nombre_producto')
                 ->findAll();
-            if (!empty($data['productos'])) {
-                return json_encode($data);
-            } else {
-                $data['error'] = 'No hay productos disponibles';
+            if (empty($data['productos'])) {
+                return json_encode(['error' => 'No hay productos disponibles']);
             }
+            return json_encode($data);
+        }
+    }
+    public function obtenerClientes()
+    {
+        if ($this->request->isAJAX()) {
+            $personaModel = new PersonaModel();
+            $data['clientes'] = $personaModel
+                ->where('tipo', 1)
+                ->orderBy('nombre')
+                ->findAll();
+            if (empty($data['clientes'])) {
+                return json_encode(['error' => 'No hay clientes disponibles']);
+            }
+            return json_encode($data);
         }
     }
 
@@ -82,7 +96,7 @@ class Vender extends BaseController
             // Producto no fue encontrado en el carro, es decir, es la primera vez que se agrega al carro
             if ($posibleIndice === -1) {
                 $producto['cantidad'] = 1;
-                
+
                 $producto['total'] = $producto['cantidad'] * $producto['precio_out'];
                 array_push($productos, $producto);
             } else {
@@ -107,81 +121,72 @@ class Vender extends BaseController
         return -1;
     }
 
-    public function cancelarVenta()
+    public function terminarCancelar()
+    {
+        if ($this->request->getPost("accion") == "terminar") {
+            return $this->terminarVenta();
+        } else {
+            return $this->cancelarVenta();
+        }
+    }
+
+    private function vaciarProductos()
     {
         session()->remove('carro');
+    }
+
+    private function cancelarVenta()
+    {
+        $this->vaciarProductos();
         return redirect()->route('venta');
     }
 
-    //calmao
-    // public function terminarOCancelarVenta(Request $request)
-    // {
-    //     if ($request->input("accion") == "terminar") {
-    //         return $this->terminarVenta($request);
-    //     } else {
-    //         return $this->cancelarVenta();
-    //     }
-    // }
+    public function terminarVenta()
+    {
+        $reglas = [
+            'cliente' => 'required'
+        ];
+        $mensaje = [
+            'cliente' => [
+                'required' => 'Debe seleccionar al cliente'
+            ]
+        ];
 
-    // public function terminarVenta(Request $request)
-    // {
-    //     // Crear una venta
-    //     $venta = new Venta();
-    //     $venta->id_cliente = $request->input("id_cliente");
-    //     $venta->saveOrFail();
-    //     $idVenta = $venta->id;
-    //     $productos = $this->obtenerProductos();
-    //     // Recorrer carrito de compras
-    //     foreach ($productos as $producto) {
-    //         // El producto que se vende...
-    //         $productoVendido = new ProductoVendido();
-    //         $productoVendido->fill([
-    //             "id_venta" => $idVenta,
-    //             "descripcion" => $producto->descripcion,
-    //             "codigo_barras" => $producto->codigo_barras,
-    //             "precio" => $producto->precio_venta,
-    //             "cantidad" => $producto->cantidad,
-    //         ]);
-    //         // Lo guardamos
-    //         $productoVendido->saveOrFail();
-    //         // Y restamos la existencia del original
-    //         $productoActualizado = Producto::find($producto->id);
-    //         $productoActualizado->existencia -= $productoVendido->cantidad;
-    //         $productoActualizado->saveOrFail();
-    //     }
-    //     $this->vaciarProductos();
-    //     return redirect()
-    //         ->route("vender.index")
-    //         ->with("mensaje", "Venta terminada");
-    // }
-
-
-
-    // private function vaciarProductos()
-    // {
-    //     $this->guardarProductos(null);
-    // }
-
-
-
-
-
-
-    // public function agregarProductoVenta(Request $request)
-    // {
-    //     $codigo = $request->post("codigo");
-    //     $producto = Producto::where("codigo_barras", "=", $codigo)->first();
-    //     if (!$producto) {
-    //         return redirect()
-    //             ->route("vender.index")
-    //             ->with("mensaje", "Producto no encontrado");
-    //     }
-    //     $this->agregarProductoACarrito($producto);
-    //     return redirect()
-    //         ->route("vender.index");
-    // }
-
-
-
-
+        if (!$this->validate($reglas, $mensaje)) {
+            $msg['error'] = [
+                'cliente' => $this->validator->getError('cliente'),
+            ];
+        } else {
+            $ventaModel = new VentaModel();
+            $productos = $this->obtenerProductosDelCarro();
+            $total = 0;
+            foreach ($productos as $p) {
+                $total += $p['precio_out'] * $p['cantidad'];
+            }
+            $data = [
+                'caja_id' => 1,
+                'usuario_id' => session('id'),
+                'persona_id' => $this->request->getPost('cliente'),
+                'total' => $total,
+                'cash' => $total,
+                'decuento' => 0,
+                'tipo_operacion_id' => 2
+            ];
+            if ($ventaModel->save($data)) {
+                $idVenta = $ventaModel->selectMax('id')->first();
+                $operacionModel = new OperacionModel();
+                foreach ($productos as $p) {
+                    $operacion = [
+                        'producto_id' => $p['id'],
+                        'cantidad' => $p['cantidad'],
+                        'venta_id' => $idVenta['id'],
+                        'tipo_operacion_id' => 2
+                    ];
+                    $operacionModel->save($operacion);
+                }
+            }
+            $this->vaciarProductos();
+            return redirect()->to('venta');
+        }
+    }
 }

@@ -13,13 +13,17 @@ Registrar Venta
             </div>
             <div>Registrar Venta
                 <div class="page-title-subheading">
+                    Registra una venta
                 </div>
             </div>
         </div>
         <div class="page-title-actions">
+            <?= form_open('terminar-cancelar', ['id' => 'terminarCancelarForm']) ?>
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelarModal">
                 Cancelar
             </button>
+            <button name="accion" value="terminar" type="submit" class="btn btn-success">Vender</button>
+            <?= form_close() ?>
         </div>
     </div>
 </div>
@@ -33,9 +37,16 @@ Registrar Venta
         <div class="main-card mb-3 card">
             <div class="card-body viewdata">
                 <div class="form-group row">
+                    <label for="clientes" class="col-sm-2 col-form-label">Clientes</label>
+                    <div class="col-sm-6">
+                        <select class="custom-select" name="cliente" form="terminarCancelarForm" id="cliente">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label for="producto" class="col-sm-2 col-form-label">Productos</label>
                     <div class="col-sm-8">
-                        <select class="custom-select" id="producto">
+                        <select class="custom-select" form="" id="producto">
                         </select>
                     </div>
                     <div class="col-sm-2">
@@ -68,7 +79,7 @@ Registrar Venta
 
 <?= $this->section('scripts') ?>
 <script>
-    var token =  '<?= csrf_hash() ?>';
+    var token = '<?= csrf_hash() ?>';
 </script>
 <script src="<?= base_url('js/vender.js') ?>"></script>
 <?= $this->endSection() ?>
@@ -87,9 +98,7 @@ Registrar Venta
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar vendiendo</button>
-                <?= form_open('cancelar-venta') ?>
-                <button type="submit" class="btn btn-warning">Cancelar Venta</button>
-                <?= form_close() ?>
+                <button type="submit" form="terminarCancelarForm" name="accion" value="cancelar" class="btn btn-warning">Cancelar Venta</button>
             </div>
         </div>
     </div>

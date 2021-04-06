@@ -34,6 +34,12 @@ class Venta extends Migration
 				'unsigned'       => true,
 				'null'	=> true
 			],
+			'tipo_operacion_id'       => [
+				'type'           => 'INT',
+				'constraint'     => 5,
+				'unsigned'       => true,
+				'null'	=> true
+			],
 			'total'       => [
 				'type'           => 'INT',
 				'constraint'     => 11,
@@ -66,6 +72,7 @@ class Venta extends Migration
 		$this->forge->addForeignKey('caja_id','caja','id','CASCADE','SET NULL');
 		$this->forge->addForeignKey('usuario_id','usuario','id','CASCADE','SET NULL');
 		$this->forge->addForeignKey('persona_id','persona','id','CASCADE','SET NULL');
+		$this->forge->addForeignKey('tipo_operacion_id','tipo_operacion','id','CASCADE','SET NULL');
 		$this->forge->createTable('venta');
 		$this->db->enableForeignKeyChecks();
 	}

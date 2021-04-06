@@ -35,7 +35,6 @@ class Usuario extends BaseController
                 return redirect()->to('home');
             }
         }
-
         return view('Usuario/login', $data);
     }
 
@@ -147,8 +146,6 @@ class Usuario extends BaseController
                 $msg['success'] = 'Usuario Ingresado Correctamente';
             }
             return json_encode($msg);
-        } else {
-            exit();
         }
     }
 
@@ -157,12 +154,9 @@ class Usuario extends BaseController
         if ($this->request->isAJAX()) {
             $id = $this->request->getVar('id');
             $usuarioModel = new UsuarioModel();
-
             $data = $usuarioModel->withDeleted()->find($id);
             $msg['success'] = view("Usuario/usuario_editar", $data);
             return json_encode($msg);
-        } else {
-            exit('Nope');
         }
     }
 
@@ -236,8 +230,6 @@ class Usuario extends BaseController
                 $msg['success'] = "Usuario #{$id} modificado exitosamente";
             }
             return json_encode($msg);
-        } else {
-            exit('Nope');
         }
     }
 
@@ -250,14 +242,12 @@ class Usuario extends BaseController
 			$data = $usuarioModel->withDeleted()->find($id);
 			$msg['success'] = view("Usuario/usuario_borrar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
 	public function delete()
 	{
-		if ($this->request->isAjax()) {
+		if ($this->request->isAJAX()) {
 			$usuarioModel = new UsuarioModel();
 			$id = $this->request->getVar('id');
 			$usuario = $usuarioModel->withDeleted()->find($id);
@@ -273,8 +263,6 @@ class Usuario extends BaseController
 				$msg['error'] = "Error al intentar modificar Usuario #{$id}";
 			}
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 

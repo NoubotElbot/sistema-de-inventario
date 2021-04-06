@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class VentaModel extends Model
+class OperacionModel extends Model
 {
-    protected $table      = 'venta';
+    protected $table      = 'operacion';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
@@ -17,14 +17,10 @@ class VentaModel extends Model
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
     protected $deletedField     = 'deleted_at';
-
     protected $allowedFields = [
-        'caja_id',
-        'usuario_id',
-        'persona_id',
-        'total',
-        'cash',
-        'descuento',
+        'id',
+        'producto_id',
+        'cantidad',
         'tipo_operacion_id',
         'created_at',
         'updated_at',

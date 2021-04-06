@@ -71,10 +71,11 @@ $routes->delete('producto/delete', 'Producto::delete', ['filter' => 'super']);
 /* Venta */
 $routes->get('venta', 'Venta::index', ['filter' => 'auth']);
 $routes->post('venta/lista', 'Venta::obtenerData', ['filter' => 'auth']);
-$routes->post('cancelar-venta', 'vender::cancelarVenta', ['filter' => 'auth']);
+$routes->post('terminar-cancelar', 'Vender::terminarCancelar', ['filter' => 'auth']);
 // Vender
 $routes->get('vender', 'Vender::index', ['filter' => 'auth']);
 $routes->post('get_productos', 'Vender::obtenerProductos', ['filter' => 'auth']);
+$routes->post('get_clientes', 'Vender::obtenerClientes', ['filter' => 'auth']);
 $routes->post('get_carro', 'Vender::obtenerCarro', ['filter' => 'auth']);
 $routes->post('agregar_al_carro', 'Vender::agregarAlCarro', ['filter' => 'auth']);
 $routes->post('registrar_venta', 'Vender::registrarVenta', ['filter' => 'auth']);
