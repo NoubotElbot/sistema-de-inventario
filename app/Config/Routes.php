@@ -70,6 +70,7 @@ $routes->post('producto/borrar', 'Producto::borrar', ['filter' => 'super']);
 $routes->delete('producto/delete', 'Producto::delete', ['filter' => 'super']);
 /* Venta */
 $routes->get('venta', 'Venta::index', ['filter' => 'auth']);
+$routes->post('venta/detalle', 'Venta::detalle', ['filter' => 'auth']);
 $routes->post('venta/lista', 'Venta::obtenerData', ['filter' => 'auth']);
 $routes->post('terminar-cancelar', 'Vender::terminarCancelar', ['filter' => 'auth']);
 // Vender

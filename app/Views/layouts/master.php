@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    
+
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         <?= $this->include('layouts/header') ?>
         <div class="app-main">
@@ -32,12 +32,15 @@
     </div>
 
     <script src="<?= base_url('/js/jquery-3.5.1.min.js') ?>"></script>
-    <script src="<?= base_url('/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
-
-    <script type="text/javascript" src="<?= base_url() . '/js/main.js' ?>"></script>
+    <script src="<?= base_url('/js/popper/popper.min.js') ?>" ></script>
+    <script src="<?= base_url('/js/bootstrap/bootstrap.min.js') ?>"></script>
     <script>
-        $('.dropdown-toggle').dropdown()
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+        $('.dropdown-toggle').dropdown();
     </script>
+    <script type="text/javascript" src="<?= base_url() . '/js/main.js' ?>"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/JSZip-2.5.0/jszip.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>/DataTables/pdfmake-0.1.36/vfs_fonts.js"></script>

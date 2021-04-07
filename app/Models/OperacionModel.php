@@ -22,6 +22,7 @@ class OperacionModel extends Model
         'producto_id',
         'cantidad',
         'tipo_operacion_id',
+        'venta_id',
         'created_at',
         'updated_at',
         'deleted_at'

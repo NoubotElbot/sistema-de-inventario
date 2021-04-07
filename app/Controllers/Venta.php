@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\ProductoModel;
+use App\Models\OperacionModel;
 use App\Models\VentaModel;
 
 class Venta extends BaseController
@@ -11,6 +11,24 @@ class Venta extends BaseController
 	{
 		$data['vista'] = 'venta';
 		return view('Venta/venta', $data);
+	}
+
+	public function detalle()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getPost('id');
+			$ventaModel = new VentaModel();
+			$opereacionModel = new OperacionModel();
+			$data['venta'] = $ventaModel->select('venta.*, usuario.username')
+				->join('usuario', 'usuario.id = venta.usuario_id', 'left')
+				->find($id);
+			$data['operaciones'] = $opereacionModel->select('operacion.*, producto.nombre_producto, producto.precio_out')
+				->join('producto', 'operacion.producto_id = producto.id')
+				->where('venta_id', $id)
+				->findAll();
+			$msg['success'] = view("Venta/detalle", $data);
+			return json_encode($msg);
+		}
 	}
 
 	public function obtenerData()
@@ -22,7 +40,7 @@ class Venta extends BaseController
 				->withDeleted()
 				->findAll();
 			foreach ($data['data'] as $i => $row) {
-				$btnDetalle = '<a class="btn btn-info" href="#"><i class="fas fa-clipboard-list"></i></a>';
+				$btnDetalle = '<button type="button" class="btn btn-info" onclick="detalle(\''.$row['id'].'\')" data-toggle="tooltip" title="Some tooltip text!"><i class="fas fa-clipboard-list"></i></button>';
 				$data['data'][$i]['created_at'] = date('d/m/Y H:i:s', strtotime($data['data'][$i]['created_at']));
 				$data['data'][$i]['opciones'] = $btnDetalle;
 			}

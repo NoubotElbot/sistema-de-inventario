@@ -61,6 +61,7 @@ Ventas
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
 <script>
+    var token = "<?= csrf_hash() ?>";
     var table = $('#myTable').DataTable({
         language: {
             "processing": "Procesando...",
@@ -245,6 +246,29 @@ Ventas
             }
         ]
     });
+
+    function detalle(id) {
+        $.ajax({
+            type: "POST",
+            url: 'venta/detalle',
+            data: {
+                csrf_test_name: token,
+                id: id
+            },
+            dataType: "json",
+            beforeSend: function() {},
+            complete: function() {},
+            success: function(response) {
+                if (response.success) {
+                    $('.viewmodal').html(response.success);
+                    $('#venta-detalle-modal').modal('show');
+                }
+            },
+            error: function(xhr, ajaxOption, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+    }
 </script>
 
 <?= $this->endSection() ?>

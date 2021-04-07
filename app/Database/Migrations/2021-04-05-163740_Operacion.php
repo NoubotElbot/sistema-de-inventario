@@ -31,6 +31,7 @@ class Operacion extends Migration
 				'type'           => 'INT',
 				'constraint'     => 5,
 				'unsigned'       => true,
+				'null'	=> false
 			],
 			'tipo_operacion_id'       => [
 				'type'           => 'INT',
@@ -52,7 +53,7 @@ class Operacion extends Migration
 			]
 		]);
 		$this->forge->addKey('id', true);
-		$this->forge->addForeignKey('producto_id','prodcuto','id','CASCADE','SET NULL');
+		$this->forge->addForeignKey('producto_id','producto','id','CASCADE','SET NULL');
 		$this->forge->addForeignKey('venta_id','venta','id','CASCADE','CASCADE');
 		$this->forge->addForeignKey('tipo_operacion_id','tipo_operacion','id','CASCADE','SET NULL');
 		$this->forge->createTable('operacion');
