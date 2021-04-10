@@ -1,4 +1,4 @@
-# Sistema de Inventario y Ventas de uso general(Aun en desarrollo)
+# Sistema de Inventario y Ventas de uso general (Aun en desarrollo)
 
 ## Funciones
 - Ten control de tus producto (precio, stock, compra y mas)
