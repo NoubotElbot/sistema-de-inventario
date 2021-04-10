@@ -20,7 +20,7 @@
 
 Configura la conexión a tu base de datos en el archivo `.env`.
 
-Ejecutar el siguiente comando en la raiz del proyecto para ejecutar las migraciones:
+Ejecutar el siguiente comando en la raiz del proyecto para aplicar las migraciones:
 
     php spark migrate
 
