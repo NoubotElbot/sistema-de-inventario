@@ -5,12 +5,7 @@
                 <ul class="nav">
                     <li class="nav-item">
                         <a href="javascript:void(0);" class="nav-link">
-                            Footer Link 1
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="javascript:void(0);" class="nav-link">
-                            Footer Link 2
+                            Ayuda
                         </a>
                     </li>
                 </ul>
@@ -18,9 +13,7 @@
             <div class="app-footer-right">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="javascript:void(0);" class="nav-link">
-                            Footer Link 3
-                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=+56973382229" class="nav-link">Soporte WhatsApp</a>
                     </li>
                 </ul>
             </div>

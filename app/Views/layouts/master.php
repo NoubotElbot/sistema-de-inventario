@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="es">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?= csrf_meta() ?>
     <title>SICV | <?= $this->renderSection('titulo') ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="msapplication-tap-highlight" content="no">
@@ -32,7 +33,7 @@
     </div>
 
     <script src="<?= base_url('/js/jquery-3.5.1.min.js') ?>"></script>
-    <script src="<?= base_url('/js/popper/popper.min.js') ?>" ></script>
+    <script src="<?= base_url('/js/popper/popper.min.js') ?>"></script>
     <script src="<?= base_url('/js/bootstrap/bootstrap.min.js') ?>"></script>
     <script>
         $(function() {

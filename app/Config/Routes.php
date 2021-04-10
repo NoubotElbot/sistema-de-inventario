@@ -43,6 +43,7 @@ $routes->post('usuario/borrar', 'Usuario::borrar', ['filter' => 'super']);
 $routes->delete('usuario/delete', 'Usuario::delete', ['filter' => 'super']);
 /* Home */
 $routes->get('home', 'Home::index', ['as' => 'home', 'filter' => 'auth']);
+$routes->post('datosHome', 'Home::datosHome', ['as' => 'home', 'filter' => 'auth']);
 /* Categoria */
 $routes->get('categoria', 'Categoria::index', ['filter' => 'auth']);
 $routes->post('categoria/lista', 'Categoria::obtenerData', ['filter' => 'auth']);

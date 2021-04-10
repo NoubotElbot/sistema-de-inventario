@@ -30,49 +30,18 @@
         </span>
     </div>
     <div class="app-header__content">
-        <div class="app-header-left">
-            <div class="search-wrapper">
-                <div class="input-holder">
-                    <input type="text" class="search-input" placeholder="Type to search">
-                    <button class="search-icon"><span></span></button>
-                </div>
-                <button class="close"></button>
-            </div>
-            <ul class="header-menu nav">
-                <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-database"> </i>
-                        Statistics
-                    </a>
-                </li>
-                <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-edit"></i>
-                        Projects
-                    </a>
-                </li>
-                <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-cog"></i>
-                        Settings
-                    </a>
-                </li>
-            </ul>
-        </div>
         <div class="app-header-right">
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
                         <div class="widget-content-left">
+                            <?= session('nombre') ?>
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn dropdown-toggle">
-                                    <?= session()->get('admin') == 1 ? '<img width="42" class="rounded-circle" src="/images/admin_pic.png" alt="">' : '<img width="42" class="rounded-circle" src="/images/user_logo.png" alt="">'?>
+                                    <?= session()->get('admin') == 1 ? '<img width="42" class="rounded-circle" src="/images/admin_pic.png" alt="">' : '<img width="42" class="rounded-circle" src="/images/user_logo.png" alt="">' ?>
                                 </a>
                                 <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                    <button type="button" tabindex="0" class="dropdown-item">User Account</button>
-                                    <button type="button" tabindex="0" class="dropdown-item">Settings</button>
-                                    <h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                    <button type="button" tabindex="0" class="dropdown-item">Actions</button>
+                                    <a href="<?= base_url('usuario') ?>" tabindex="0" class="dropdown-item">Cuenta de usuario</a>
                                     <div tabindex="-1" class="dropdown-divider"></div>
                                     <a href="<?= route_to("logout") ?>" tabindex="0" class="dropdown-item">Cerrar Sesión</a>
                                 </div>
