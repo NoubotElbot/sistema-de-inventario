@@ -37,17 +37,25 @@ class Categoria extends BaseController
 		}
 	}
 
+	public function new()
+	{
+		if ($this->request->isAJAX()) {
+			$msg['success'] = view("Categoria/categoria_agregar");
+			return json_encode($msg);
+		}
+	}
 
 	public function agregar()
 	{
 		if ($this->request->isAJAX()) {
 			$rules = [
-				'nombre' => 'required',
+				'nombre' => 'required|is_unique[categoria.nombre]',
 				'descripcion' => 'max_length[255]'
 			];
 			$messages = [
 				'nombre' => [
-					'required' => 'Debe ingresar el nombre'
+					'required' => 'Debe ingresar el nombre',
+					'is_unique' => 'Ya existe una categoria con ese nombre'
 				],
 				'descripcion' => [
 					'max_length' => 'Descripcion excede el largo de 255 caracteres'
@@ -86,8 +94,9 @@ class Categoria extends BaseController
 	public function update()
 	{
 		if ($this->request->isAJAX()) {
+			$id = $this->request->getPost('id');
 			$rules = [
-				'nombre' => 'required',
+				'nombre' => "required|is_unique[categoria.nombre,id,$id]",
 				'descripcion' => 'max_length[255]'
 			];
 			$messages = [
@@ -109,7 +118,7 @@ class Categoria extends BaseController
 					'nombre' => $this->request->getPost('nombre'),
 					'descripcion' => $this->request->getPost('descripcion'),
 				];
-				$id = $this->request->getPost('id');
+				
 				$categoriaModel->update($id, $datos);
 				$msg['success'] = "Categoria #{$id} modificada exitosamente";
 			}

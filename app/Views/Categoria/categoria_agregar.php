@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <h5 class="card-title">Nueva Categoria</h5>
-                <?= form_open('categoria/agregar', ['id' => 'categoria-agregar', 'class' => 'needs-validation']) ?>
+                <?= form_open('categoria/agregar', ['id' => 'categoria-agregar']) ?>
                 <div class="form-row">
                     <div class="col-sm-12">
                         <div class="position-relative form-group">
@@ -41,54 +41,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $('.close-modal').mousedown(function(e) {
-        document.getElementById("categoria-agregar").reset();
-    });
-    $('#categoria-agregar').submit(function(e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            dataType: "json",
-            beforeSend: function() {
-                $('.btnsubmit').attr('disable', 'disabled');
-                $('.btnsubmit').html('<i class="fa fa-spin fa-spinner"></i>')
-            },
-            complete: function() {
-                $('.btnsubmit').removeAttr('disable');
-                $('.btnsubmit').html('Guardar')
-            },
-            success: function(response) {
-                if (response.error) {
-                    if (response.error.nombre) {
-                        $('#nombre').addClass('is-invalid');
-                        $('.validationNombre').html(response.error.nombre);
-                    } else {
-                        $('#nombre').removeClass('is-invalid');
-                        $('.validationNombre').html('');
-                    }
-
-                    if (response.error.descripcion) {
-                        $('#descripcion').addClass('is-invalid');
-                        $('.validationDescripcion').html(response.error.descripcion);
-                    } else {
-                        $('#descripcion').removeClass('is-invalid');
-                        $('.validationDescripcion').html('');
-                    }
-                } else {
-                    $("#categoria-agregar-modal").click();
-                    document.getElementById("categoria-agregar").reset();
-                    $('.cuadro-alertas').show();
-                    $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
-                    table.ajax.reload(null, false);
-                }
-            },
-            error: function(xhr, ajaxOption, thrownError) {
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-            }
-        });
-        return false;
-    })
-</script>
+<script src="<?= base_url('js/Categoria/new.js') ?>" type="text/javascript"></script>

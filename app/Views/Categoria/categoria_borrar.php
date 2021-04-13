@@ -12,6 +12,8 @@
                 <h5>Esta a pundo de <?= $deleted_at == null ? 'Desactivar' : 'Activar' ?> la Categoría:</h5>
                 <h5><?=$nombre.' #'.$id?></h5>
                 <?= form_open('categoria/delete', ['id' => 'categoria-borrar']) ?>
+                <input type="hidden" name="_method" value="DELETE" />
+                <input name="id" id="id-edit" type="hidden" class="form-control" value="<?= $id ?>" readonly>
                 <button type="button" class="btn btn-warning close-modal" data-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-danger btnsubmit">Aceptar</button>
                 <?= form_close() ?>
@@ -19,35 +21,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $('#categoria-borrar').submit(function(e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: {
-                id: <?= $id ?>,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>',
-                _method: 'DELETE'
-            },
-            dataType: "json",
-            success: function(response) {
-                $('#categoria-borrar-modal').modal('hide');
-                if (response.success) {
-                    $('.cuadro-alertas').show();
-                    $('.alert ').html(response.success).removeAttr('class').addClass('alert alert-success');
-                    table.ajax.reload();
-                }
-
-                if (response.error) {
-                    $('.cuadro-alertas').show();
-                    $('.alert ').html(response.error).removeAttr('class').addClass('alert alert-danger');
-                }
-            },
-            error: function(xhr, ajaxOption, thrownError) {
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-            }
-        });
-        return false;
-    })
+<script src="<?=base_url('js/Categoria/delete.js')?>" type="text/javascript">
 </script>

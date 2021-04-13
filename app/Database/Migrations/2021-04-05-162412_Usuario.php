@@ -19,7 +19,8 @@ class Usuario extends Migration
 			'username'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '100',
-				'null'		 => false
+				'null'		 => false,
+				'unique'	 => true,
 			],
 			'nombre'       => [
 				'type'       => 'VARCHAR',
@@ -34,7 +35,8 @@ class Usuario extends Migration
 			'email'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '200',
-				'null'		 => true
+				'null'		 => true,
+				'unique'	 => true,
 			],
 			'admin'       => [
 				'type'       => 'TINYINT',

@@ -27,14 +27,11 @@ class Producto extends BaseController
 				$btnEditar = "";
 				$btnBorrar = "";
 				if (session()->get('admin') == 1) {
-
-					$paraEdit = $row['id'] . ",'" . base_url('producto/editar') . "','" . csrf_hash() . "'";
-					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $paraEdit . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
-					$paraBorrar = $row['id'] . ",'" . base_url('producto/borrar') . "','" . csrf_hash() . "'";
+					$btnEditar = '<button type="button" class="btn-shadow btn btn-primary" onclick="edit(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></button>';
 					if ($row['deleted_at'] == null) {
-						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $paraBorrar . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
+						$btnBorrar = '<button type="button" class="btn btn-danger" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fas fa-trash-alt"></i></button>';
 					} else {
-						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $paraBorrar . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
+						$btnBorrar = '<button type="button" class="btn btn-warning" onclick="activar_desactivar(' . $row['id'] . ')" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fas fa-recycle"></i></button>';
 					}
 				}
 				$data['data'][$i]['stock'] = $data['data'][$i]['stock'] <= $data['data'][$i]['stock_critico'] ? '<span class="text-danger">' . $data['data'][$i]['stock'] . ' <i class="fas fa-exclamation-triangle"></i>' . '</span>' : $data['data'][$i]['stock'];
@@ -50,11 +47,9 @@ class Producto extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$categoriaModel = new CategoriaModel();
-			$data['categorias'] = $categoriaModel->findAll();
+			$data['categorias'] = $categoriaModel->orderBy('nombre')->findAll();
 			$msg['success'] = view("Producto/producto_agregar", $data);
 			return json_encode($msg);
-		} else {
-			exit('Nope');
 		}
 	}
 
