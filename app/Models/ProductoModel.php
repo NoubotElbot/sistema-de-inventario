@@ -16,6 +16,7 @@ class ProductoModel extends Model
     protected $updatedField     = 'updated_at';
     protected $deletedField     = 'deleted_at';
     protected $allowedFields    = [
+        'codigo',
         'nombre_producto',
         'descripcion',
         'precio_in',

@@ -36,6 +36,13 @@ class Persona extends BaseController
 		}
 	}
 
+	public function new()
+	{
+		if ($this->request->isAJAX()) {
+			$msg['success'] = view("Persona/persona_agregar");
+			return json_encode($msg);
+		}
+	}
 
 	public function agregar()
 	{
@@ -178,7 +185,7 @@ class Persona extends BaseController
 					'direccion' => $this->request->getPost('direccion'),
 				];
 				$personaModel->update($id, $datos);
-				$msg['success'] = 'Registro actualizado correctamnete';
+				$msg['success'] = "Registro #$id actualizado correctamnete";
 			}
 			return json_encode($msg);
 		}

@@ -27,11 +27,17 @@ Ventas
     </div>
 </div>
 <div class="row">
-    <div class="col-12 cuadro-alertas" style="display: none;">
-        <div class="alert" role="alert">
-
+<?php if (session('success')) : ?>
+        <div class="col-12">
+            <div class=" alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Hey!</strong>
+                <?= session('success') ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
     <div class="col">
         <div class="main-card mb-3 card">
             <div class="card-body viewdata">
@@ -229,20 +235,6 @@ Ventas
             },
             {
                 "data": "opciones"
-            }
-        ],
-        dom: 'Bfrtilp',
-        buttons: [{
-                extend: 'pdfHtml5',
-                text: '<i class="fas fa-file-pdf"></i>',
-                titleAttr: 'Exportar a Pdf',
-                className: 'btn btn-danger'
-            },
-            {
-                extend: 'excelHtml5',
-                text: '<i class="fas fa-file-excel"></i>',
-                titleAttr: 'Exportar a Excel',
-                className: 'btn btn-success'
             }
         ]
     });

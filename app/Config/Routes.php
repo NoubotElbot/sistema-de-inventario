@@ -56,6 +56,7 @@ $routes->delete('categoria/delete', 'Categoria::delete', 		['filter' => 'super']
 /* Persona */
 $routes->get('persona', 			'Persona::index', 		['filter' => 'auth']);
 $routes->post('persona/lista', 		'Persona::obtenerData', ['filter' => 'auth']);
+$routes->post('persona/new', 		'Persona::new', 		['filter' => 'super']);
 $routes->post('persona/agregar', 	'Persona::agregar',		['filter' => 'super']);
 $routes->post('persona/editar', 	'Persona::editar', 		['filter' => 'super']);
 $routes->put('persona/update', 		'Persona::update', 		['filter' => 'super']);

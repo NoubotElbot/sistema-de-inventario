@@ -1,41 +1,35 @@
 function agregar() {
-  $.ajax({
-    type: "POST",
-    url: "producto/new",
-    data: {
-      csrf_test_name: $("meta[name='X-CSRF-TOKEN']").attr("content"),
-    },
-    dataType: "json",
-    beforeSend: function () {
-      $("#agregarBtn").attr("disable", "disabled");
-      $("#agregarBtn").html('<i class="fa fa-spin fa-spinner"></i>');
-    },
-    complete: function () {
-      $("#agregarBtn").removeAttr("disable");
-      $("#agregarBtn").html(`<span class="btn-icon-wrapper pr-2 opacity-7">
-                                 <i class="fa fa-plus-circle fa-w-20"></i>
-                            </span>Nuevo Producto`);
-    },
-    success: function (response) {
-      if (response.success) {
-        $(".viewmodal").html(response.success);
-        $("#producto-agregar-modal").on("shown.bs.modal	", function (event) {
-          // do something...
-          $("#codigo").focus();
-        });
-        $("#producto-agregar-modal").modal("show");
-      }
-    },
-    error: function (xhr, ajaxOption, thrownError) {
-      alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-    },
-  });
-}
+    $.ajax({
+      type: "POST",
+      url: "persona/new",
+      data: {
+        csrf_test_name: $("meta[name='X-CSRF-TOKEN']").attr("content"),
+      },
+      dataType: "json",
+      beforeSend: function () {
+        $("#agregarBtn").attr("disable", "disabled");
+        $("#agregarBtn").html('<i class="fa fa-spin fa-spinner"></i>');
+      },
+      complete: function () {
+        $("#agregarBtn").removeAttr("disable");
+        $("#agregarBtn").html("Nuevo Cliente/Provedor");
+      },
+      success: function (response) {
+        if (response.success) {
+          $(".viewmodal").html(response.success);
+          $("#persona-agregar-modal").modal("show");
+        }
+      },
+      error: function (xhr, ajaxOption, thrownError) {
+        alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+      },
+    });
+  }
 
 function edit(id) {
   $.ajax({
     type: "POST",
-    url: "producto/editar",
+    url: "persona/editar",
     data: {
       id: id,
       csrf_test_name: $("meta[name='X-CSRF-TOKEN']").attr("content"),
@@ -44,7 +38,7 @@ function edit(id) {
     success: function (response) {
       if (response.success) {
         $(".viewmodal").html(response.success);
-        $("#producto-editar-modal").modal("show");
+        $("#persona-editar-modal").modal("show");
       }
     },
     error: function (xhr, ajaxOption, thrownError) {
@@ -56,7 +50,7 @@ function edit(id) {
 function activar_desactivar(id) {
   $.ajax({
     type: "POST",
-    url: "producto/borrar",
+    url: "persona/borrar",
     data: {
       id: id,
       csrf_test_name: $("meta[name='X-CSRF-TOKEN']").attr("content"),
@@ -65,7 +59,7 @@ function activar_desactivar(id) {
     success: function (response) {
       if (response.success) {
         $(".viewmodal").html(response.success);
-        $("#producto-borrar-modal").modal("show");
+        $("#persona-borrar-modal").modal("show");
       }
     },
     error: function (xhr, ajaxOption, thrownError) {
@@ -95,28 +89,6 @@ var table = $("#myTable").DataTable({
     aria: {
       sortAscending: ": Activar para ordenar la columna de manera ascendente",
       sortDescending: ": Activar para ordenar la columna de manera descendente",
-    },
-    buttons: {
-      copy: "Copiar",
-      colvis: "Visibilidad",
-      collection: "Colección",
-      colvisRestore: "Restaurar visibilidad",
-      copyKeys:
-        "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
-      copySuccess: {
-        1: "Copiada 1 fila al portapapeles",
-        _: "Copiadas %d fila al portapapeles",
-      },
-      copyTitle: "Copiar al portapapeles",
-      csv: "CSV",
-      excel: "Excel",
-      pageLength: {
-        "-1": "Mostrar todas las filas",
-        1: "Mostrar 1 fila",
-        _: "Mostrar %d filas",
-      },
-      pdf: "PDF",
-      print: "Imprimir",
     },
     decimal: ",",
     searchBuilder: {
@@ -209,43 +181,37 @@ var table = $("#myTable").DataTable({
     thousands: ".",
   },
   ajax: {
-    url: "producto/lista",
+    url: "persona/lista",
     type: "POST",
     data: {
       csrf_test_name: $("meta[name='X-CSRF-TOKEN']").attr("content"),
     },
     dataSrc: "data",
-    complete: ()=>{$(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })}
   },
   columns: [
     {
-      data: "codigo",
+      data: "id",
     },
     {
-      data: "nombre_producto",
+      data: "nombre",
     },
     {
-      data: "categoria",
+      data: "apellido",
     },
     {
-      data: "precio_in",
+      data: "direccion",
     },
     {
-      data: "precio_out",
+      data: "telefono",
     },
     {
-      data: "stock",
+      data: "email",
     },
     {
-      data: "stock_critico",
+      data: "tipo",
     },
     {
-      data: "username",
-    },
-    {
-      data: "deleted_at",
+      data: "empresa",
     },
     {
       data: "opciones",

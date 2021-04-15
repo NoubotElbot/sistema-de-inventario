@@ -15,6 +15,14 @@ $("#producto-editar").submit(function (e) {
     },
     success: function (response) {
       if (response.error) {
+        if (response.error.codigo) {
+          $("#codigo").addClass("is-invalid");
+          $(".validationCodigo").html(response.error.codigo);
+        } else {
+          $("#codigo").removeClass("is-invalid");
+          $(".validationCodigo").html("");
+        }
+        
         if (response.error.nombre_producto) {
           $("#nombre_producto_edit").addClass("is-invalid");
           $(".validationNombre").html(response.error.nombre_producto);
@@ -65,13 +73,13 @@ $("#producto-editar").submit(function (e) {
       } else {
         $("#producto-editar-modal").modal("hide");
         $(".cuadro-alertas").html(
-            `<div class="alert alert-success alert-dismissible fade show" role="alert">
+          `<div class="alert alert-success alert-dismissible fade show" role="alert">
                   ${response.success}
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>`
-          );
+        );
         table.ajax.reload(null, false);
       }
     },

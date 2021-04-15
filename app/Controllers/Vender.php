@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CajaModel;
 use App\Models\PersonaModel;
 use App\Models\ProductoModel;
 use App\Models\OperacionModel;
@@ -13,6 +14,8 @@ class Vender extends BaseController
     public function index()
     {
         $data['vista'] = 'venta';
+        $cajaModel = new CajaModel();
+        $data['cajas'] = $cajaModel->findAll();
         return view('Venta/vender', $data);
     }
 
@@ -82,9 +85,9 @@ class Vender extends BaseController
     public function agregarAlCarro()
     {
         if ($this->request->isAjax()) {
-            $id = $this->request->getPost("id");
+            $codigo = $this->request->getPost("codigo");
             $productoModel = new ProductoModel();
-            $producto = $productoModel->find($id);
+            $producto = $productoModel->where('codigo', $codigo)->first();
             if (!$producto) {
                 return json_encode(['error' => 'Producto no encotrado']);
             }
@@ -144,18 +147,23 @@ class Vender extends BaseController
     public function terminarVenta()
     {
         $reglas = [
-            'cliente' => 'required'
+            'cliente' => 'required|is_not_unique[cliente.id]',
+            'caja' => 'required|is_not_unique[caja.id]',
         ];
         $mensaje = [
             'cliente' => [
-                'required' => 'Debe seleccionar al cliente'
-            ]
+                'required' => 'Debe seleccionar al cliente',
+                'is_not_unique' => 'Error cliente no exite'
+            ],
+            'caja' => [
+                'required' => 'Debe seleccionar una caja',
+                'is_not_unique' => 'Error caja no exite'
+            ],
         ];
 
-        if (!$this->validate($reglas, $mensaje)) {
-            $msg['error'] = [
-                'cliente' => $this->validator->getError('cliente'),
-            ];
+        if (!$this->validate($reglas, $mensaje) || !$this->obtenerProductosDelCarro()) {
+            session()->setFlashdata('errors', $this->validator);
+            return redirect()->to('vender');
         } else {
             $ventaModel = new VentaModel();
             $productos = $this->obtenerProductosDelCarro();
@@ -164,7 +172,7 @@ class Vender extends BaseController
                 $total += $p['precio_out'] * $p['cantidad'];
             }
             $data = [
-                'caja_id' => 1,
+                'caja_id' => $this->request->getPost('caja'),
                 'usuario_id' => session('id'),
                 'persona_id' => $this->request->getPost('cliente'),
                 'total' => $total,
@@ -175,6 +183,7 @@ class Vender extends BaseController
             if ($ventaModel->save($data)) {
                 $idVenta = $ventaModel->selectMax('id')->first();
                 $operacionModel = new OperacionModel();
+                $productoModel = new ProductoModel();
                 foreach ($productos as $p) {
                     $operacion = [
                         'producto_id' => $p['id'],
@@ -183,9 +192,12 @@ class Vender extends BaseController
                         'tipo_operacion_id' => 2
                     ];
                     $operacionModel->save($operacion);
+                    // Y restamos el stock
+                    $productoModel->set('stock', "stock-{$p['cantidad']}", false)->update($p['id']);
                 }
             }
             $this->vaciarProductos();
+            session()->setFlashdata('success', 'Venta realizada con exito');
             return redirect()->to('venta');
         }
     }

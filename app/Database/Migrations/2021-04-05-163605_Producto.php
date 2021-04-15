@@ -18,6 +18,13 @@ class Producto extends Migration
 				'auto_increment' => true,
 				'null'			 => false
 			],
+			'codigo'          => [
+				'type'           => 'BIGINT',
+				'constraint'     => 15,
+				'unsigned'       => true,
+				'null'			 => false,
+				'unique'		=> true
+			],
 			'nombre_producto'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '200',

@@ -30,22 +30,9 @@ Productos
     </div>
 </div>
 <div class="row">
-    <!-- <div class="col-lg-6 col-xl-4">
-        <div class="card mb-3 widget-content">
-            <div class="widget-content-wrapper">
-                <div class="widget-content-left">
-                    <div class="widget-heading">Total Orders</div>
-                    <div class="widget-subheading">Last year expenses</div>
-                </div>
-                <div class="widget-content-right">
-                    <div class="widget-numbers text-success"><span>1896</span></div>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div class="col-12 cuadro-alertas">
     </div>
-    <div class="col">
+    <div class="col-12">
         <div class="main-card mb-3 card">
             <div class="card-body viewdata">
                 <h5 class="card-title">Productos</h5>
@@ -55,12 +42,11 @@ Productos
                             <tr>
                                 <th>#</th>
                                 <th>Nombre</th>
-                                <th>Descripcion</th>
+                                <th>Categoria</th>
                                 <th>Precio Compra</th>
                                 <th>Precio Venta</th>
                                 <th>Stock</th>
                                 <th>Stock Critico</th>
-                                <th>Categoria</th>
                                 <th>Usuario</th>
                                 <th>Estado</th>
                                 <th>Opciones</th>

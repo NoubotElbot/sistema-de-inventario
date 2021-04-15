@@ -1,5 +1,5 @@
 <div class="modal fade" id="producto-editar-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Registro de Productos</h5>
@@ -12,6 +12,17 @@
                 <?= form_open('producto/update', ['id' => 'producto-editar']) ?>
                 <input type="hidden" name="_method" value="PUT" readonly />
                 <input name="id" id="id-edit" type="hidden" class="form-control" value="<?= $producto['id'] ?>" readonly>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="position-relative form-group">
+                            <label for="codigo">Código</label>
+                            <input name="codigo" id="codigo" placeholder="Ingrese el código de barras" type="number" min="0" pattern="^[0-9]+" class="form-control" value="<?= $producto['codigo'] ?>">
+                            <div class=" invalid-feedback validationCodigo">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="col-md-6">
                         <div class="position-relative form-group">

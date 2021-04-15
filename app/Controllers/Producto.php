@@ -57,6 +57,7 @@ class Producto extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$rules = [
+				'codigo' => 'required|numeric|greater_than_equal_to[0]|is_unique[producto.codigo]',
 				'nombre_producto' => 'required',
 				'categoria' => 'required|is_not_unique[categoria.id]',
 				'precio_in' => 'required|numeric|greater_than_equal_to[1]',
@@ -66,6 +67,12 @@ class Producto extends BaseController
 			];
 
 			$messages = [
+				'codigo' => [
+					'required' => 'Debe Ingresar el código del producto',
+					'numeric' => 'El código debe ser numerico',
+					'greater_than_equal_to' => 'El código no puede ser un número negativo',
+					'is_unique' => 'Ya existe un producto con ese código'
+				],
 				'nombre_producto' => [
 					'required' => 'Debe ingresar el nombre del producto'
 				],
@@ -96,6 +103,7 @@ class Producto extends BaseController
 			];
 			if (!$this->validate($rules, $messages)) {
 				$msg['error'] = [
+					'codigo' => $this->validator->getError('codigo'),
 					'nombre_producto' => $this->validator->getError('nombre_producto'),
 					'categoria' => $this->validator->getError('categoria'),
 					'precio_in' => $this->validator->getError('precio_in'),
@@ -106,7 +114,9 @@ class Producto extends BaseController
 			} else {
 				$productoModel = new ProductoModel();
 				$datos = [
+					'codigo' => $this->request->getPost('codigo'),
 					'nombre_producto' => $this->request->getPost('nombre_producto'),
+					'descripcion' => $this->request->getPost('descripcion'),
 					'categoria_id' => $this->request->getPost('categoria'),
 					'precio_in' => $this->request->getPost('precio_in'),
 					'precio_out' => $this->request->getPost('precio_out'),
@@ -137,7 +147,9 @@ class Producto extends BaseController
 	public function update()
 	{
 		if ($this->request->isAJAX()) {
+			$id = $this->request->getPost('id');
 			$rules = [
+				'codigo' => "required|numeric|greater_than_equal_to[0]|is_unique[producto.codigo,id,$id]",
 				'nombre_producto' => 'required',
 				'categoria' => 'required|is_not_unique[categoria.id]',
 				'precio_in' => 'required|numeric|greater_than_equal_to[1]',
@@ -147,6 +159,12 @@ class Producto extends BaseController
 			];
 
 			$messages = [
+				'codigo' => [
+					'required' => 'Debe Ingresar el código del producto',
+					'numeric' => 'El código debe ser numerico',
+					'greater_than_equal_to' => 'El código no puede ser un número negativo',
+					'is_unique' => 'Ya existe un producto con ese código'
+				],
 				'nombre_producto' => [
 					'required' => 'Debe ingresar el nombre del producto'
 				],
@@ -177,6 +195,7 @@ class Producto extends BaseController
 			];
 			if (!$this->validate($rules, $messages)) {
 				$msg['error'] = [
+					'codigo' => $this->validator->getError('codigo'),
 					'nombre_producto' => $this->validator->getError('nombre_producto'),
 					'categoria' => $this->validator->getError('categoria'),
 					'precio_in' => $this->validator->getError('precio_in'),
@@ -187,6 +206,7 @@ class Producto extends BaseController
 			} else {
 				$productoModel = new ProductoModel();
 				$datos = [
+					'codigo' => $this->request->getPost('codigo'),
 					'nombre_producto' => $this->request->getPost('nombre_producto'),
 					'categoria_id' => $this->request->getPost('categoria'),
 					'descripcion' => $this->request->getPost('descripcion'),
@@ -196,7 +216,6 @@ class Producto extends BaseController
 					'stock_critico' => $this->request->getPost('stock_critico'),
 					'usuario_id' => session('id'),
 				];
-				$id = $this->request->getPost('id');
 				$productoModel->update($id, $datos);
 				$msg['success'] = "Registro #{$id} modificado correctamente";
 			}

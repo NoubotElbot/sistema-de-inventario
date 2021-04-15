@@ -209,6 +209,9 @@ var table = $("#myTable").DataTable({
       csrf_test_name: $("meta[name='X-CSRF-TOKEN']").attr("content"),
     },
     dataSrc: "data",
+    complete: ()=>{$(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })}
   },
   columns: [
     {
@@ -228,21 +231,6 @@ var table = $("#myTable").DataTable({
     },
     {
       data: "opciones",
-    },
-  ],
-  dom: "Bfrtilp",
-  buttons: [
-    {
-      extend: "pdfHtml5",
-      text: '<i class="fas fa-file-pdf"></i>',
-      titleAttr: "Exportar a Pdf",
-      className: "btn btn-danger",
-    },
-    {
-      extend: "excelHtml5",
-      text: '<i class="fas fa-file-excel"></i>',
-      titleAttr: "Exportar a Excel",
-      className: "btn btn-success",
     },
   ],
 });

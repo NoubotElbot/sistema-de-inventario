@@ -18,6 +18,14 @@ $("#producto-agregar").submit(function (e) {
     },
     success: function (response) {
       if (response.error) {
+        if (response.error.codigo) {
+          $("#codigo").addClass("is-invalid");
+          $(".validationCodigo").html(response.error.codigo);
+        } else {
+          $("#codigo").removeClass("is-invalid");
+          $(".validationCodigo").html("");
+        }
+
         if (response.error.nombre_producto) {
           $("#nombre_producto").addClass("is-invalid");
           $(".validationNombre").html(response.error.nombre_producto);
