@@ -26,7 +26,7 @@ Ejecutar el siguiente comando en la raiz del proyecto para aplicar las migracion
 
 Luego ejecuta el seeder para el correcto funcionamiento del sistema (app/Database/Seeds/InitSeed.php):
 
-    php db:seed InitSeed
+    php spark db:seed InitSeed
 
 
 **By Noubot**
