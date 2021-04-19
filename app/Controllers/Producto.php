@@ -137,7 +137,7 @@ class Producto extends BaseController
 			$id = $this->request->getVar('id');
 			$categoriaModel = new CategoriaModel();
 			$productoModel = new ProductoModel();
-			$data['categorias'] = $categoriaModel->findAll();
+			$data['categorias'] = $categoriaModel->withDeleted()->findAll();
 			$data['producto'] = $productoModel->withDeleted()->find($id);
 			$msg['success'] = view("Producto/producto_editar", $data);
 			return json_encode($msg);
@@ -170,6 +170,7 @@ class Producto extends BaseController
 				],
 				'categoria' => [
 					'required' => 'Debe seleccionar una categoría',
+					'numeric' => 'Error en categoría',
 					'is_not_unique' => 'Error categoría no existe'
 				],
 				'precio_in' => [

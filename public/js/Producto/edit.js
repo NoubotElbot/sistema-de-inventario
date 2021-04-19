@@ -22,7 +22,7 @@ $("#producto-editar").submit(function (e) {
           $("#codigo").removeClass("is-invalid");
           $(".validationCodigo").html("");
         }
-        
+
         if (response.error.nombre_producto) {
           $("#nombre_producto_edit").addClass("is-invalid");
           $(".validationNombre").html(response.error.nombre_producto);
@@ -80,7 +80,16 @@ $("#producto-editar").submit(function (e) {
                   </button>
               </div>`
         );
-        table.ajax.reload(null, false);
+        try {
+          home();
+        } catch (error) {
+          console.log();
+        }
+        try {
+          table.ajax.reload(null, false);
+        } catch (error) {
+          console.log();
+        }
       }
     },
     error: function (xhr, ajaxOption, thrownError) {

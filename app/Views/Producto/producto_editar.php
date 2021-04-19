@@ -37,12 +37,12 @@
                         <div class="position-relative form-group">
                             <label for="categoria">Categoria</label>
                             <select class="custom-select" name="categoria" id="categoria_edit">
-                                <option> ------ </option>
+                                <option value=""> ------ </option>
                                 <?php foreach ($categorias as $categoria) : ?>
                                     <option value="<?= $categoria['id'] ?>" <?= $categoria['id'] == $producto['categoria_id'] ? 'selected' : '' ?>><?= $categoria['nombre'] ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <div class="invalid-feedback validationPrecio">
+                            <div class="invalid-feedback validationCategoria">
 
                             </div>
                         </div>

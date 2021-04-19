@@ -146,22 +146,24 @@ class Vender extends BaseController
 
     public function terminarVenta()
     {
+        if(!$this->obtenerProductosDelCarro()){
+            session()->setFlashdata('error', 'El carro esta vacio');
+            return redirect()->to('vender');
+        }
         $reglas = [
-            'cliente' => 'required|is_not_unique[cliente.id]',
-            'caja' => 'required|is_not_unique[caja.id]',
+            'cliente' => 'required|is_not_unique[persona.id]',
+            'caja' => 'required',
         ];
         $mensaje = [
             'cliente' => [
                 'required' => 'Debe seleccionar al cliente',
-                'is_not_unique' => 'Error cliente no exite'
             ],
             'caja' => [
                 'required' => 'Debe seleccionar una caja',
-                'is_not_unique' => 'Error caja no exite'
             ],
         ];
 
-        if (!$this->validate($reglas, $mensaje) || !$this->obtenerProductosDelCarro()) {
+        if (!$this->validate($reglas, $mensaje)) {
             session()->setFlashdata('errors', $this->validator);
             return redirect()->to('vender');
         } else {

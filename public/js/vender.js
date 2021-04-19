@@ -10,11 +10,12 @@ function addCommas(nStr) {
   return x1 + x2;
 }
 
-
 function cargarClientes() {
   let clientes_select = $("#cliente");
   clientes_select.find("option").remove();
-  clientes_select.append("<option class=\"text-muted\" value=''> Seleccione un cliente </option>");
+  clientes_select.append(
+    "<option class=\"text-muted\" value=''> Seleccione un cliente </option>"
+  );
   $.ajax({
     type: "POST",
     url: "/get_clientes",
@@ -41,9 +42,9 @@ function cargarClientes() {
 }
 function onKeyDownHandler(event) {
   var codigo = event.which || event.keyCode;
-  if(codigo === 9){
-    $("#venderBtn").click()
-  }  
+  if (codigo === 9) {
+    $("#venderBtn").click();
+  }
 }
 function cargarCarro() {
   let tabla = document.getElementById("tbody");
@@ -81,8 +82,8 @@ function cargarCarro() {
         }
         $("#total").text(`Total: $${addCommas(total)}`);
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-        })
+          $('[data-toggle="tooltip"]').tooltip();
+        });
       } else {
         let fila = '<td colspan="6">No hay productos en este carro</td>';
         let btn = document.createElement("TR");
@@ -126,13 +127,15 @@ $("#agregar-form").submit(function (e) {
       csrf_test_name: token,
     },
     dataType: "json",
-    complete: ()=>{$("#producto").val('')},
+    complete: () => {
+      $("#producto").val("");
+    },
     success: function (data) {
       if (data.error) {
         alert(data.error + ` #${codigo}`);
       } else {
         cargarCarro();
-        $('#producto').focus();
+        $("#producto").focus();
       }
     },
     error: function (xhr, ajaxOption, thrownError) {
@@ -143,5 +146,5 @@ $("#agregar-form").submit(function (e) {
 $(document).ready(function () {
   cargarClientes();
   cargarCarro();
-  $('#producto').focus();
+  $("#producto").focus();
 });

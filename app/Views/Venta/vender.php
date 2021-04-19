@@ -1,5 +1,4 @@
 <?= $this->extend('layouts/master') ?>
-
 <?= $this->section('titulo') ?>
 Registrar Venta
 <?= $this->endSection() ?>
@@ -45,7 +44,7 @@ Registrar Venta
                     <div class="col">
                         <?php foreach ($cajas as $c) : ?>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="caja<?= $c['id'] ?>" name="caja" class="custom-control-input">
+                                <input type="radio" id="caja<?= $c['id'] ?>" name="caja" class="custom-control-input" value="<?= $c['id'] ?>">
                                 <label class="custom-control-label" for="caja<?= $c['id'] ?>">Caja <?= $c['id'] ?></label>
                             </div>
                         <?php endforeach; ?>
@@ -61,7 +60,7 @@ Registrar Venta
                 <?= form_close() ?>
                 <form id="agregar-form">
                     <div class="form-group row">
-                        <label for="producto" class="col-sm-2 col-form-label">Codigo</label>
+                        <label for="producto" class="col-sm-2 col-form-label">Código</label>
                         <div class="col-sm-8">
                             <input onkeydown="onKeyDownHandler(event);" class="custom-select" name="producto" id="producto" type="number" min="0" pattern="^[0-9]+" />
                         </div>

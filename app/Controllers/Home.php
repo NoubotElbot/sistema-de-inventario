@@ -21,7 +21,7 @@ class Home extends BaseController
 			$productoModel = new ProductoModel();
 			$personaModel = new PersonaModel();
 			$ventasModel = new VentaModel();
-			$data['productos'] = $productoModel->select('id, nombre_producto, stock, stock_critico')->findAll();
+			$data['productos'] = $productoModel->select('id, nombre_producto, stock, stock_critico')->where('stock <= stock_critico')->findAll();
 			$data['clientes'] = count($personaModel->where('tipo', 1)->findAll());
 			$data['provedores'] = count($personaModel->where('tipo', 0)->findAll());
 			$data['operaciones'] = $ventasModel->selectSum('total', 'ventas')->where('tipo_operacion_id', 2)->where("created_at >= '".$this->inicioMesActual()."'")->first();

@@ -10,13 +10,6 @@
                     </li>
                 </ul>
             </div>
-            <div class="app-footer-right">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a href="https://api.whatsapp.com/send?phone=+56973382229" class="nav-link">Soporte WhatsApp</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
 </div>

@@ -35,7 +35,7 @@
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
                         <div class="widget-content-left">
-                            <?= session('nombre') ?>
+                            <?= session('username') ?>
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn dropdown-toggle">
                                     <?= session()->get('admin') == 1 ? '<img width="42" class="rounded-circle" src="/images/admin_pic.png" alt="">' : '<img width="42" class="rounded-circle" src="/images/user_logo.png" alt="">' ?>
@@ -54,11 +54,6 @@
                             <div class="widget-subheading">
                                 <?= session()->get('admin') == '1' ? "Administrador" : "" ?>
                             </div>
-                        </div>
-                        <div class="widget-content-right header-user-info ml-3">
-                            <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
-                                <i class="fa text-white fa-calendar pr-1 pl-1"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
