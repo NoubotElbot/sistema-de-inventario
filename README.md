@@ -23,9 +23,8 @@ Ejecutar el siguiente comando en la raiz del proyecto para aplicar las migracion
 
     php spark migrate
 
-Luego ejecuta el seeder para el correcto funcionamiento del sistema (app/Database/Seeds/InitSeed.php):
+Luego ejecuta el seeder para el correcto funcionamiento del sistema (Nota: revisar el seeder para perzonalizar al primer usuario del sistema en app/Database/Seeds/InitSeed.php):
 
     php spark db:seed InitSeed
-
 
 **By Noubot**
